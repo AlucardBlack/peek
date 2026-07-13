@@ -19,7 +19,6 @@ import android.widget.Toast
 import com.peek.browser.Constant
 import com.peek.browser.MainApplication
 import com.peek.browser.R
-import com.peek.browser.util.Analytics
 import com.peek.browser.util.Util
 
 /*

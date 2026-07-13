@@ -33,7 +33,6 @@ import com.peek.browser.ui.SearchURLSuggestionsContainer
 import com.peek.browser.ui.SettingsActivity
 import com.peek.browser.ui.SettingsMoreActivity
 import com.peek.browser.util.ActionItem
-import com.peek.browser.util.Analytics
 import com.peek.browser.util.CrashTracking
 import com.peek.browser.util.EventBus
 import com.peek.browser.util.IconCache
@@ -71,8 +70,6 @@ class MainApplication : Application() {
 
         sDatabaseHelper = DatabaseHelper(this)
         sSearchURLSuggestionsContainer = SearchURLSuggestionsContainer()
-
-        Analytics.init(this)
 
         Favicons.attachToContext(this)
         recreateFaviconCache()

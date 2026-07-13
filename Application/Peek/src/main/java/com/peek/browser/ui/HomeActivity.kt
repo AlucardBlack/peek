@@ -29,7 +29,7 @@ import com.peek.browser.MainApplication
 import com.peek.browser.MainController
 import com.peek.browser.R
 import com.peek.browser.Settings
-import com.peek.browser.util.Analytics
+import com.peek.browser.util.SourceTag
 import com.peek.browser.util.EventBus
 import com.peek.browser.util.Util
 
@@ -51,8 +51,6 @@ class HomeActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         Util.padForStatusBarInset(toolbar)
-
-        Analytics.trackScreenView(HomeActivity::class.java.simpleName)
 
         mActionButtonView = findViewById(R.id.big_white_button)
         mNewBubble = findViewById(R.id.new_bubble)
@@ -100,7 +98,7 @@ class HomeActivity : AppCompatActivity() {
 
         mNewBubble.setOnClickListener {
             MainApplication.openLink(this@HomeActivity, this@HomeActivity.getString(R.string.empty_bubble_page),
-                    Analytics.OPENED_URL_FROM_MAIN_NEW_TAB)
+                    SourceTag.OPENED_URL_FROM_MAIN_NEW_TAB)
         }
 
         EventBus.subscribe(this, Settings.LinkLoadTimeStatsUpdatedEvent::class.java, ::onLinkLoadTimeStatsUpdatedEvent)

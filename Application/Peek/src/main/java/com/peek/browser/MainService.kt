@@ -21,7 +21,7 @@ import androidx.core.content.ContextCompat
 import com.peek.browser.ui.NotificationCloseAllActivity
 import com.peek.browser.ui.NotificationHideActivity
 import com.peek.browser.ui.NotificationUnhideActivity
-import com.peek.browser.util.Analytics
+import com.peek.browser.util.SourceTag
 import com.peek.browser.util.CrashTracking
 import com.peek.browser.util.EventBus
 
@@ -73,7 +73,7 @@ class MainService : Service() {
                                 setAsCurrentTab = i == urls.size - 1
                             }
 
-                            mainController.openUrl(urlAsString, urlLoadStartTime, setAsCurrentTab, Analytics.OPENED_URL_FROM_RESTORE)
+                            mainController.openUrl(urlAsString, urlLoadStartTime, setAsCurrentTab, SourceTag.OPENED_URL_FROM_RESTORE)
                         }
                     }
                 }

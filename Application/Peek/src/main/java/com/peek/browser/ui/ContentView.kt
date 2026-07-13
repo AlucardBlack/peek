@@ -66,7 +66,7 @@ import com.peek.browser.adblock.WhiteListCollector
 import com.peek.browser.articlerender.ArticleContent
 import com.peek.browser.articlerender.ArticleRenderer
 import com.peek.browser.util.ActionItem
-import com.peek.browser.util.Analytics
+import com.peek.browser.util.SourceTag
 import com.peek.browser.util.CrashTracking
 import com.peek.browser.util.DownloadImage
 import com.peek.browser.util.Util
@@ -1479,7 +1479,7 @@ class ContentView @JvmOverloads constructor(
 
                 R.id.item_new_bubble -> {
                     MainApplication.openLink(context, context.getString(R.string.empty_bubble_page),
-                            Analytics.OPENED_URL_FROM_NEW_TAB)
+                            SourceTag.OPENED_URL_FROM_NEW_TAB)
                 }
 
                 R.id.item_close_tab -> {
@@ -1640,14 +1640,14 @@ class ContentView @JvmOverloads constructor(
                     override fun handleMessage(msg: Message) {
                         val b = msg.data
                         if (b != null && b.getString("url") != null) {
-                            MainController.get()!!.openUrl(b.getString("url")!!, System.currentTimeMillis(), false, Analytics.OPENED_URL_FROM_NEW_TAB)
+                            MainController.get()!!.openUrl(b.getString("url")!!, System.currentTimeMillis(), false, SourceTag.OPENED_URL_FROM_NEW_TAB)
                         }
                     }
                 }
                 webView.requestFocusNodeHref(msg)
             }
             if (string == openLinkInNewBubbleLabel || string == openImageInNewBubbleLabel) {
-                MainController.get()!!.openUrl(urlAsString, System.currentTimeMillis(), false, Analytics.OPENED_URL_FROM_NEW_TAB)
+                MainController.get()!!.openUrl(urlAsString, System.currentTimeMillis(), false, SourceTag.OPENED_URL_FROM_NEW_TAB)
             } else if (openInBrowserLabel != null && string == openInBrowserLabel) {
                 openInBrowser(urlAsString, false)
             } else if (string == shareLabel) {

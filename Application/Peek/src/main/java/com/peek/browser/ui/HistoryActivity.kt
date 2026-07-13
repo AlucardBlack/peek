@@ -37,7 +37,7 @@ import com.peek.browser.Settings
 import com.peek.browser.db.DatabaseHelper
 import com.peek.browser.db.HistoryRecord
 import com.peek.browser.util.ActionItem
-import com.peek.browser.util.Analytics
+import com.peek.browser.util.SourceTag
 import com.peek.browser.util.EventBus
 import com.peek.browser.util.Util
 import org.mozilla.gecko.favicons.Favicons
@@ -204,7 +204,7 @@ class HistoryActivity : AppCompatActivity(), AdapterView.OnItemClickListener, Ad
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         if (view.tag is HistoryItem) {
             val historyItem = view.tag as HistoryItem
-            MainApplication.openLink(this, historyItem.mHistoryRecord!!.getUrl()!!, Analytics.OPENED_URL_FROM_HISTORY)
+            MainApplication.openLink(this, historyItem.mHistoryRecord!!.getUrl()!!, SourceTag.OPENED_URL_FROM_HISTORY)
         }
     }
 
@@ -259,9 +259,9 @@ class HistoryActivity : AppCompatActivity(), AdapterView.OnItemClickListener, Ad
                 val urlAsString = historyItem.mHistoryRecord!!.getUrl()!!
                 if (string == openInNewBubbleLabel) {
                     if (MainController.get() != null) {
-                        MainController.get()!!.openUrl(urlAsString, System.currentTimeMillis(), false, Analytics.OPENED_URL_FROM_HISTORY)
+                        MainController.get()!!.openUrl(urlAsString, System.currentTimeMillis(), false, SourceTag.OPENED_URL_FROM_HISTORY)
                     } else {
-                        MainApplication.openLink(applicationContext, urlAsString, Analytics.OPENED_URL_FROM_HISTORY)
+                        MainApplication.openLink(applicationContext, urlAsString, SourceTag.OPENED_URL_FROM_HISTORY)
                     }
                 } else if (openInBrowserLabel != null && string == openInBrowserLabel) {
                     val intent = Intent(Intent.ACTION_VIEW)

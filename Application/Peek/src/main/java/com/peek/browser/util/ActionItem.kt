@@ -23,12 +23,12 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.peek.browser.BuildConfig
 import com.peek.browser.Constant
 import com.peek.browser.R
 import com.peek.browser.Settings
-import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView
 
 class ActionItem(
         @JvmField val mType: Constant.ActionType,
@@ -60,7 +60,7 @@ class ActionItem(
             private val mContext: Context,
             private val mLayoutResourceId: Int,
             private val mData: Array<ActionItem>
-    ) : ArrayAdapter<ActionItem>(mContext, mLayoutResourceId, mData), StickyListHeadersAdapter {
+    ) : ArrayAdapter<ActionItem>(mContext, mLayoutResourceId, mData) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             var view = convertView
@@ -82,19 +82,97 @@ class ActionItem(
 
             return view
         }
+    }
 
-        override fun getHeaderView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val inflater = (mContext as Activity).layoutInflater
-            val view = inflater.inflate(R.layout.view_section_header, parent, false)
-            val actionItem = mData[position]
-            val headerLabel = view.findViewById<TextView>(R.id.section_text)
-            headerLabel.text = actionItem.getCategory()
-            return view
+    // Sticky-section-header-aware RecyclerView adapter, used only by getConfigureBubbleAlert().
+    // mData is expected to already be sorted by category (getActionItems() does this), so a new
+    // header row is inserted whenever the category changes.
+    private class ActionItemRecyclerAdapter(
+            private val mLayoutResourceId: Int,
+            private val mData: Array<ActionItem>,
+            private val mOnItemClick: (ActionItem) -> Unit
+    ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyHeaderInterface {
+
+        // Row index -> ActionItem index, or -1 if the row is a section header.
+        private val mRowToItemIndex = ArrayList<Int>()
+
+        init {
+            var lastCategory: String? = null
+            for (i in mData.indices) {
+                val category = mData[i].getCategory()
+                if (category != lastCategory) {
+                    mRowToItemIndex.add(-1)
+                    lastCategory = category
+                }
+                mRowToItemIndex.add(i)
+            }
         }
 
-        override fun getHeaderId(position: Int): Long {
-            val actionItem = mData[position]
-            return if (actionItem.mType == Constant.ActionType.View) 0 else 1
+        override fun getItemCount(): Int {
+            return mRowToItemIndex.size
+        }
+
+        override fun getItemViewType(position: Int): Int {
+            return if (mRowToItemIndex[position] == -1) TYPE_HEADER else TYPE_ITEM
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            return if (viewType == TYPE_HEADER) {
+                HeaderViewHolder(inflater.inflate(R.layout.view_section_header, parent, false))
+            } else {
+                ItemViewHolder(inflater.inflate(mLayoutResourceId, parent, false))
+            }
+        }
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            if (holder is HeaderViewHolder) {
+                holder.label.text = categoryForRow(position)
+            } else if (holder is ItemViewHolder) {
+                val actionItem = mData[mRowToItemIndex[position]]
+                holder.label.text = actionItem.getLabel()
+                holder.icon.setImageDrawable(actionItem.mIcon)
+                holder.itemView.setOnClickListener { mOnItemClick(actionItem) }
+            }
+        }
+
+        private fun categoryForRow(headerPosition: Int): String {
+            return mData[mRowToItemIndex[headerPosition + 1]].getCategory()
+        }
+
+        override fun isHeader(itemPosition: Int): Boolean {
+            return mRowToItemIndex[itemPosition] == -1
+        }
+
+        override fun getHeaderPositionForItem(itemPosition: Int): Int {
+            var position = itemPosition
+            while (!isHeader(position)) {
+                position -= 1
+                if (position < 0) return 0
+            }
+            return position
+        }
+
+        override fun getHeaderLayout(headerPosition: Int): Int {
+            return R.layout.view_section_header
+        }
+
+        override fun bindHeaderData(header: View, headerPosition: Int) {
+            header.findViewById<TextView>(R.id.section_text).text = categoryForRow(headerPosition)
+        }
+
+        private class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val label: TextView = itemView.findViewById(R.id.section_text)
+        }
+
+        private class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val label: TextView = itemView.findViewById(R.id.label)
+            val icon: ImageView = itemView.findViewById(R.id.icon)
+        }
+
+        companion object {
+            private const val TYPE_HEADER = 0
+            private const val TYPE_ITEM = 1
         }
     }
 
@@ -325,22 +403,20 @@ class ActionItem(
 
             val actionItems = getActionItems(context, true, true, true)
 
-            val listView = StickyListHeadersListView(context)
+            val recyclerView = RecyclerView(context)
+            recyclerView.layoutManager = LinearLayoutManager(context)
 
             val alertDialog = AlertDialog.Builder(context).create()
             alertDialog.setIcon(Util.getAlertIcon(context))
             alertDialog.setTitle(R.string.preference_configure_bubble_title)
-            alertDialog.setView(listView)
+            alertDialog.setView(recyclerView)
 
-            val adapter = ActionItemAdapter(context, R.layout.action_picker_item, actionItems.toTypedArray())
-            listView.adapter = adapter
-            listView.setOnItemClickListener(AdapterView.OnItemClickListener { _, view, _, _ ->
-                val tag = view.tag
-                if (tag is ActionItem) {
-                    onActionItemSelectedListener?.onSelected(tag)
-                    alertDialog.dismiss()
-                }
-            })
+            val adapter = ActionItemRecyclerAdapter(R.layout.action_picker_item, actionItems.toTypedArray()) { actionItem ->
+                onActionItemSelectedListener?.onSelected(actionItem)
+                alertDialog.dismiss()
+            }
+            recyclerView.adapter = adapter
+            recyclerView.addItemDecoration(StickyHeaderItemDecoration(adapter))
 
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, context.resources.getString(R.string.action_use_default), DialogInterface.OnClickListener { _, _ ->
             })

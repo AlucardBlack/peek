@@ -41,7 +41,7 @@ import com.peek.browser.ui.ExpandedActivity
 import com.peek.browser.ui.Prompt
 import com.peek.browser.ui.TabView
 import com.peek.browser.util.ActionItem
-import com.peek.browser.util.Analytics
+import com.peek.browser.util.SourceTag
 import com.peek.browser.util.AppPoller
 import com.peek.browser.util.CrashTracking
 import com.peek.browser.util.EventBus
@@ -745,8 +745,6 @@ class MainController private constructor(context: Context, eventHandler: EventHa
     fun openUrl(urlAsString: String, urlLoadStartTime: Long, setAsCurrentTab: Boolean,
                 openedFromAppName: String?): TabView? {
 
-        Analytics.trackOpenUrl(openedFromAppName)
-
         if (wasUrlRecentlyLoaded(urlAsString, urlLoadStartTime) && urlAsString != mContext.getString(R.string.empty_bubble_page)) {
             Toast.makeText(mContext, R.string.duplicate_link_will_not_be_loaded, Toast.LENGTH_SHORT).show()
             return null
@@ -811,14 +809,14 @@ class MainController private constructor(context: Context, eventHandler: EventHa
         }
 
         var openedFromItself = false
-        if (null != openedFromAppName && (openedFromAppName == Analytics.OPENED_URL_FROM_NEW_TAB
-                        || openedFromAppName == Analytics.OPENED_URL_FROM_HISTORY)) {
+        if (null != openedFromAppName && (openedFromAppName == SourceTag.OPENED_URL_FROM_NEW_TAB
+                        || openedFromAppName == SourceTag.OPENED_URL_FROM_HISTORY)) {
             showAppPicker = true
             openedFromItself = true
         }
         mCanAutoDisplayLink = true
         val result = openUrlInTab(urlAsString, urlLoadStartTime, setAsCurrentTab, showAppPicker,
-                !(openedFromAppName?.equals(Analytics.OPENED_URL_FROM_MAIN_NEW_TAB) ?: false))
+                !(openedFromAppName?.equals(SourceTag.OPENED_URL_FROM_MAIN_NEW_TAB) ?: false))
 
         // Show app picker after creating the tab to load so that we have the instance to close if redirecting to an app, re #292.
         if (!openedFromItself && showAppPicker && !MainApplication.sShowingAppPickerDialog && 0 != resolveInfos?.size) {

@@ -12,15 +12,15 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.peek.browser.BuildConfig
 import com.peek.browser.Constant
 import com.peek.browser.R
+import com.peek.browser.util.StickyHeaderInterface
+import com.peek.browser.util.StickyHeaderItemDecoration
 import com.peek.browser.util.Util
-import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView
 import java.util.ArrayList
 import java.util.Locale
 
@@ -58,118 +58,117 @@ class FAQDialog(context: Activity) {
     // Call to show the FAQ
     fun show() {
 
-        val inflater = mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val layout = inflater.inflate(R.layout.view_faq, null)
-
-        val listView = layout.findViewById<StickyListHeadersListView>(R.id.faq_list)
-        listView.setOnItemClickListener(object : AdapterView.OnItemClickListener {
-            override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                if (position == sFAQSize - 1) {
-                    val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null))
-                    val appVersion = BuildConfig.VERSION_NAME
-                    val subject = "[Peek] Report a bug (v" + appVersion + ", Android " + Constant.getOSFlavor() +
-                            ", " + android.os.Build.MODEL + ", " + Locale.getDefault().language + ")"
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, "My bug is ...\n\nHow often does the problem occur?\n\nAre you running a ROM and/or a modified framework/kernel? ")
-                    mActivity.startActivity(Intent.createChooser(emailIntent, "Send bug report email..."))
-                } else {
-                    val adapter = view.tag as FAQAdapter
-                    adapter.toggle(position)
-                }
-            }
-        })
-        listView.setAdapter(FAQAdapter(mActivity))
+        val recyclerView = RecyclerView(mActivity)
+        recyclerView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        recyclerView.layoutManager = LinearLayoutManager(mActivity)
+        val adapter = FAQAdapter(mActivity)
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(StickyHeaderItemDecoration(adapter))
 
         val alertDialog = AlertDialog.Builder(mActivity).create()
         alertDialog.setIcon(Util.getAlertIcon(mActivity))
         alertDialog.setTitle(R.string.faq_title)
-        alertDialog.setView(layout)
-
-        /*
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt(KEY_HORIZONTAL_PADDING_PREFERENCE, horizontalSeekBar.getProgress());
-                editor.putInt(KEY_VERTICAL_PADDING_PREFERENCE, verticalSeekBar.getProgress());
-                editor.commit();
-            }
-
-        });
-
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.restore_default_action), new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt(KEY_HORIZONTAL_PADDING_PREFERENCE, LauncherPreferences.get().getWorkspaceHorizontalPaddingDefaultAsInt());
-                editor.putInt(KEY_VERTICAL_PADDING_PREFERENCE, LauncherPreferences.get().getWorkspaceVerticalPaddingDefaultAsInt());
-                editor.commit();
-            }
-        });
-        */
+        alertDialog.setView(recyclerView)
 
         Util.showThemedDialog(alertDialog)
     }
 
-    private inner class FAQAdapter(context: Context) : BaseAdapter(), StickyListHeadersAdapter {
+    private inner class FAQAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyHeaderInterface {
 
-        val mInflater: LayoutInflater = LayoutInflater.from(context)
+        private val mInflater: LayoutInflater = LayoutInflater.from(context)
 
-        override fun getCount(): Int {
-            return sFAQSize
+        // Row index -> FAQ entry index, or -1 if the row is a section header.
+        private val mRowToFaqIndex = ArrayList<Int>()
+        // Row index -> section id (0 = general, 1 = functionality, 2 = issues).
+        private val mRowToSectionId = ArrayList<Int>()
+
+        init {
+            var sectionId = -1
+            for (faqIndex in 0 until sFAQSize) {
+                if (faqIndex == 0 || faqIndex == sFunctionalityIndex || faqIndex == sIssuesIndex) {
+                    sectionId++
+                    mRowToFaqIndex.add(-1)
+                    mRowToSectionId.add(sectionId)
+                }
+                mRowToFaqIndex.add(faqIndex)
+                mRowToSectionId.add(sectionId)
+            }
         }
 
-        override fun getItem(position: Int): Any {
+        override fun getItemCount(): Int {
+            return mRowToFaqIndex.size
+        }
+
+        override fun getItemViewType(position: Int): Int {
+            return if (mRowToFaqIndex[position] == -1) TYPE_HEADER else TYPE_ITEM
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            return if (viewType == TYPE_HEADER) {
+                HeaderViewHolder(mInflater.inflate(R.layout.view_section_header, parent, false))
+            } else {
+                ItemViewHolder(mInflater.inflate(R.layout.view_faq_item, parent, false) as FAQItem)
+            }
+        }
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            if (holder is HeaderViewHolder) {
+                holder.label.setText(sectionTitleFor(mRowToSectionId[position]))
+            } else if (holder is ItemViewHolder) {
+                val faqIndex = mRowToFaqIndex[position]
+                holder.faqItem.configure(sQuestionStringIds!![faqIndex], sAnswerStringIds!![faqIndex], mExpanded[faqIndex])
+                holder.itemView.setOnClickListener {
+                    if (faqIndex == sFAQSize - 1) {
+                        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null))
+                        val appVersion = BuildConfig.VERSION_NAME
+                        val subject = "[Peek] Report a bug (v" + appVersion + ", Android " + Constant.getOSFlavor() +
+                                ", " + android.os.Build.MODEL + ", " + Locale.getDefault().language + ")"
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, "My bug is ...\n\nHow often does the problem occur?\n\nAre you running a ROM and/or a modified framework/kernel? ")
+                        mActivity.startActivity(Intent.createChooser(emailIntent, "Send bug report email..."))
+                    } else {
+                        mExpanded[faqIndex] = !mExpanded[faqIndex]
+                        notifyItemChanged(position)
+                    }
+                }
+            }
+        }
+
+        private fun sectionTitleFor(sectionId: Int): Int {
+            return when (sectionId) {
+                0 -> R.string.faq_section_general
+                1 -> R.string.faq_section_functionality
+                else -> R.string.faq_section_issues
+            }
+        }
+
+        override fun isHeader(itemPosition: Int): Boolean {
+            return mRowToFaqIndex[itemPosition] == -1
+        }
+
+        override fun getHeaderPositionForItem(itemPosition: Int): Int {
+            var position = itemPosition
+            while (!isHeader(position)) {
+                position -= 1
+                if (position < 0) return 0
+            }
             return position
         }
 
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
+        override fun getHeaderLayout(headerPosition: Int): Int {
+            return R.layout.view_section_header
         }
 
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val faqItem: FAQItem
-            if (convertView == null) {
-                faqItem = mInflater.inflate(R.layout.view_faq_item, null) as FAQItem
-            } else {
-                faqItem = convertView as FAQItem
-            }
-
-            faqItem.configure(this, sQuestionStringIds!![position], sAnswerStringIds!![position], mExpanded[position])
-            return faqItem
+        override fun bindHeaderData(header: View, headerPosition: Int) {
+            val headerLabel = header.findViewById<TextView>(R.id.section_text)
+            headerLabel.setText(sectionTitleFor(mRowToSectionId[headerPosition]))
         }
 
-        fun toggle(position: Int) {
-            mExpanded[position] = !mExpanded[position]
-            notifyDataSetChanged()
+        private inner class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val label: TextView = itemView.findViewById(R.id.section_text)
         }
 
-        override fun getHeaderView(position: Int, convertViewIn: View?, parent: ViewGroup): View {
-            val convertView = mInflater.inflate(R.layout.view_section_header, parent, false)
-            val headerLabel = convertView.findViewById<TextView>(R.id.section_text)
-
-            var stringId = R.string.faq_section_issues
-            if (position < sFunctionalityIndex) {
-                stringId = R.string.faq_section_general
-            } else if (position < sIssuesIndex) {
-                stringId = R.string.faq_section_functionality
-            }
-
-            headerLabel.setText(stringId)
-            return convertView
-        }
-
-        override fun getHeaderId(position: Int): Long {
-            if (position < sFunctionalityIndex) {
-                return 0
-            } else if (position < sIssuesIndex) {
-                return 1
-            }
-
-            return 2
-        }
+        private inner class ItemViewHolder(val faqItem: FAQItem) : RecyclerView.ViewHolder(faqItem)
     }
 
     companion object {
@@ -198,5 +197,8 @@ class FAQDialog(context: Activity) {
 
         private const val sFunctionalityIndex = 3
         private const val sIssuesIndex = 12
+
+        private const val TYPE_HEADER = 0
+        private const val TYPE_ITEM = 1
     }
 }

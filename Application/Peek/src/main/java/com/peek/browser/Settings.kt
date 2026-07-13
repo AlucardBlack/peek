@@ -20,7 +20,6 @@ import androidx.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import com.peek.browser.ui.TabView
-import com.peek.browser.util.Analytics
 import com.peek.browser.util.CrashTracking
 import com.peek.browser.util.EventBus
 import com.peek.browser.util.Util
@@ -1048,8 +1047,6 @@ class Settings private constructor(private val mContext: Context) {
         Log.d(LOAD_TIME_TAG, "trackLinkLoadTime() - timeSaved:" + timeSaved.toFloat() / 1000f + " seconds, " + linkLoadType + ", " + url)
 
         EventBus.post(mLinkLoadTimeStatsUpdatedEvent)
-
-        Analytics.trackTimeSaved(timeSaved)
     }
 
     fun getTotalTimeSaved(): Long {

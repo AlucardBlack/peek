@@ -44,7 +44,7 @@ import com.peek.browser.MainController
 import com.peek.browser.R
 import com.peek.browser.Settings
 import com.peek.browser.articlerender.ArticleContent
-import com.peek.browser.util.Analytics
+import com.peek.browser.util.SourceTag
 import com.peek.browser.util.CrashTracking
 import com.peek.browser.util.EventBus
 import com.peek.browser.util.NetworkConnectivity
@@ -472,7 +472,7 @@ class WebViewRenderer(context: Context, controller: Controller, webRendererPlace
         }
 
         override fun onCreateWindow(view: WebView, dialog: Boolean, userGesture: Boolean, resultMsg: Message): Boolean {
-            val tabView = MainController.get()!!.openUrl(Constant.NEW_TAB_URL, System.currentTimeMillis(), false, Analytics.OPENED_URL_FROM_NEW_WINDOW)
+            val tabView = MainController.get()!!.openUrl(Constant.NEW_TAB_URL, System.currentTimeMillis(), false, SourceTag.OPENED_URL_FROM_NEW_WINDOW)
             if (tabView != null) {
                 val transport = resultMsg.obj as WebView.WebViewTransport
                 transport.webView = tabView.getContentView()!!.getWebRenderer().getView() as WebView

@@ -7,7 +7,6 @@ package com.peek.browser.ui
 import android.content.Context
 import android.text.Html
 import android.util.AttributeSet
-import android.widget.BaseAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.peek.browser.R
@@ -19,9 +18,7 @@ class FAQItem @JvmOverloads constructor(
     private var mQuestionTextView: TextView? = null
     private var mAnswerTextView: TextView? = null
 
-    fun configure(adapter: BaseAdapter, questionStringId: Int, answerStringId: Int, expanded: Boolean) {
-        tag = adapter
-
+    fun configure(questionStringId: Int, answerStringId: Int, expanded: Boolean) {
         if (mQuestionTextView == null) {
             mQuestionTextView = findViewById(R.id.question_text_view)
         }

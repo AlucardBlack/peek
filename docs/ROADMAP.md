@@ -47,7 +47,7 @@ then build. Each item lists the concrete anchors found in the tree.
 - **`android.enableJetifier=true`** in `gradle.properties` — audit whether any
   dependency still needs it; dropping Jetifier speeds builds.
 
-## Phase 2 — Dependencies & security
+## Phase 2 — Dependencies & security ✅ Done
 
 - ~~**jsoup 1.7.3 (2013).** Article-mode / snacktory HTML parsing runs on a
   decade-old jsoup with known CVEs. Bump to current 1.18.x and fix the
@@ -55,15 +55,31 @@ then build. Each item lists the concrete anchors found in the tree.
   only breaking call site was `StringUtil.join` in `ExpandedActivity` (removed
   `org.jsoup.helper.StringUtil`, replaced with `joinToString`). Added a
   runtime extraction test (`ArticleTextExtractorTest`).
-- **Unmaintained UI libs.** `se.emilsjolander:stickylistheaders` and
-  `com.timehop.stickyheadersrecyclerview` are abandoned. Plan replacement with
-  RecyclerView sticky-header patterns (RecyclerView already a dependency).
-- **Dead analytics.** `util/Analytics` is a fully stubbed no-op still carrying a
-  Universal Analytics property id (`UA-49396039-1`, a dead product). Either
-  delete the plumbing (`Analytics.*` call sites in `MainApplication`,
-  `MainController`, `Settings`) or wire a privacy-respecting replacement.
-- **Ad-block data source.** Confirm the `DownloadAdBlockData` endpoint and
-  filter lists (abp-filter-parser-cpp JNI engine) are still live and current.
+- ~~**Unmaintained UI libs.** `se.emilsjolander:stickylistheaders` and
+  `com.timehop.stickyheadersrecyclerview` are abandoned.~~ **Done** —
+  `com.timehop.stickyheadersrecyclerview` was unused, dropped outright. Wrote
+  a small reusable `StickyHeaderItemDecoration`/`StickyHeaderInterface` pair
+  (`util/`) implementing sticky headers as a RecyclerView `ItemDecoration`,
+  and migrated the two real usages: `FAQDialog` (now backed by a
+  `RecyclerView.Adapter`) and `ActionItem.getConfigureBubbleAlert()` (new
+  `ActionItemRecyclerAdapter`; the other 3 `ActionItem` dialogs keep the
+  plain `ArrayAdapter`/`ListView` they always used, since they never rendered
+  headers). Removed the `stickylistheaders` Gradle dependency, its
+  `attrs.xml` styleable block, and the now-unused `view_faq.xml` layout.
+- ~~**Dead analytics.** `util/Analytics` is a fully stubbed no-op still
+  carrying a Universal Analytics property id (`UA-49396039-1`, a dead
+  product).~~ **Done** — deleted the no-op tracking functions
+  (`init`/`trackOpenUrl`/`trackTimeSaved`/`trackScreenView`/
+  `trackUpgradePromptDisplayed`/`trackUpgradePromptClicked`), the dead
+  `UPGRADE_PROMPT_*` constants (zero call sites), and the GA property id.
+  The `OPENED_URL_FROM_*` constants were actually load-bearing source tags
+  (drive real branching in `MainController.openUrl`, not just telemetry), so
+  they moved to a new `util/SourceTag` object rather than being deleted.
+- ~~**Ad-block data source.** Confirm the `DownloadAdBlockData` endpoint and
+  filter lists (abp-filter-parser-cpp JNI engine) are still live and
+  current.~~ **Done** — verified `https://easylist.to/easylist/easylist.txt`
+  and `.../easyprivacy.txt` both return `200` with working ETags (matches
+  `ADBlockUtils`' caching logic); no code change needed.
 
 ## Phase 3 — Product & UX
 
@@ -96,9 +112,11 @@ then build. Each item lists the concrete anchors found in the tree.
 
 ### Suggested sequencing
 
-1. Phase 0 (CI + tests + build fixes) — unblocks safe iteration.
-2. Phase 2 jsoup bump — highest security/effort ratio.
-3. Phase 1 AsyncTask→coroutines — clears the biggest deprecation cluster.
+1. ~~Phase 0 (CI + tests + build fixes) — unblocks safe iteration.~~ Done.
+2. ~~Phase 2 (jsoup bump, dead UI libs, dead analytics, ad-block source
+   check) — highest security/effort ratio.~~ Done.
+3. **Phase 1 AsyncTask→coroutines — next up.** Clears the biggest
+   deprecation cluster.
 4. Interleave Phase 3 product work against the TODO backlog.
 
 *Not yet prioritized against user demand — treat ordering as engineering-risk
