@@ -15,8 +15,8 @@ carried over from the original project.
 
 `git clone git@github.com:AlucardBlack/peek.git`
 
-Copy `Application/LinkBubble/src/main/AndroidManifest.xml.template` to
-`Application/LinkBubble/src/main/AndroidManifest.xml`.
+Copy `Application/Peek/src/main/AndroidManifest.xml.template` to
+`Application/Peek/src/main/AndroidManifest.xml`.
 
 `npm install`
 
@@ -51,6 +51,6 @@ If you don't have `adb` in your path add it to your `~/.bash_profile` or similar
 `export PATH=/Users/<your-username>/Library/Android/sdk/platform-tools:$PATH`
 
 - **Installing an apk onto your device:**
-  `adb install -r ./LinkBubble/build/outputs/apk/playstore/debug/LinkBubble-playstore-debug.apk`
+  `adb install -r ./Peek/build/outputs/apk/playstore/debug/Peek-playstore-debug.apk`
 - **Getting a list of devices:**
   `adb devices`

@@ -66,7 +66,7 @@ function translateNextFile () {
 
     // Android calls: en-US -> en-rUS
     const filename = translation.iana_code.split('-').join('-r')
-    let toPath = `./Application/LinkBubble/src/main/res/values-${filename}`
+    let toPath = `./Application/Peek/src/main/res/values-${filename}`
     if (!fs.existsSync(toPath)) {
       fs.mkdirSync(toPath)
     }

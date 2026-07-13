@@ -5,7 +5,7 @@
   "scripts": {
     "translate": "babel-node scripts/updateTranslations.js",
     "postinstall": "sh ./scripts/copyJNIFiles.js",
-    "lint": "semistandard Application/LinkBubble/src/main/assets/pagescripts/*"
+    "lint": "semistandard Application/Peek/src/main/assets/pagescripts/*"
   },
   "repository": "AlucardBlack/peek",
   "licenses": [

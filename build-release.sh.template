@@ -7,4 +7,4 @@ cd ./Application
 ./gradlew assemblePlaystoreRelease
 cd ../
 mkdir -p dist
-cp Application/LinkBubble/build/outputs/apk/playstore/release/LinkBubble-playstore-release.apk dist/
+cp Application/Peek/build/outputs/apk/playstore/release/Peek-playstore-release.apk dist/

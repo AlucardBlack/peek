@@ -1,2 +1,2 @@
-include ':LinkBubble'
+include ':Peek'
 //include ':Libraries:ViewPagerIndicator:library'
