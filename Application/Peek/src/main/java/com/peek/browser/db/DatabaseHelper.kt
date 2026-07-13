@@ -39,10 +39,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // Drop older table if existed
+        // Drop older tables if they existed. Both need dropping - onCreate() below recreates
+        // both, and leaving favicons behind would make its CREATE TABLE fail on the next upgrade.
         db.execSQL("DROP TABLE IF EXISTS $TABLE_LINK_HISTORY")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_FAVICON_CACHE")
 
-        // create fresh table
+        // create fresh tables
         onCreate(db)
     }
 
@@ -154,10 +156,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun getAllHistoryRecords(): List<HistoryRecord> {
         val records = ArrayList<HistoryRecord>()
 
+        val db = writableDatabase
         try {
             val query = "SELECT * FROM $TABLE_LINK_HISTORY ORDER BY $KEY_TIME DESC;"
 
-            val db = writableDatabase
             val cursor = db.rawQuery(query, null)
 
             if (cursor.moveToFirst()) {
@@ -173,9 +175,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 } while (cursor.moveToNext())
             }
 
-            db.close()
+            cursor.close()
         } catch (exc: IllegalStateException) {
-            // TODO: just skip it for now, we will need to refactor db code in future
+            CrashTracking.log("DatabaseHelper.getAllHistoryRecords() IllegalStateException")
+        } finally {
+            db.close()
         }
 
         return records
@@ -184,10 +188,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun getRecentNHistoryRecords(countToGet: Int): List<HistoryRecord> {
         val records = ArrayList<HistoryRecord>()
 
+        val db = writableDatabase
         try {
             val query = "SELECT * FROM $TABLE_LINK_HISTORY ORDER BY $KEY_TIME DESC LIMIT $countToGet;"
 
-            val db = writableDatabase
             val cursor = db.rawQuery(query, null)
 
             if (cursor.moveToFirst()) {
@@ -203,9 +207,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 } while (cursor.moveToNext())
             }
 
-            db.close()
+            cursor.close()
         } catch (exc: IllegalStateException) {
-            // TODO: just skip it for now, we will need to refactor db code in future
+            CrashTracking.log("DatabaseHelper.getRecentNHistoryRecords() IllegalStateException")
+        } finally {
+            db.close()
         }
 
         return records

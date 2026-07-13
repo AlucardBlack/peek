@@ -79,7 +79,13 @@ class BubbleFlowDraggable @JvmOverloads constructor(
             }
 
             override fun onCenterItemSwiped(gestureDirection: VerticalGestureListener.GestureDirection) {
-                // TODO: Implement me
+                // Vertical swipe (up or down, see BubbleFlowView) on the centered tab dismisses it,
+                // same as tapping its close target - with animation and the usual undo prompt.
+                try {
+                    MainController.get()!!.closeTab(getCurrentTab(), true, true)
+                } catch (exc: NullPointerException) {
+                    CrashTracking.logHandledException(exc)
+                }
             }
 
             override fun onCenterItemChanged(sender: BubbleFlowView, view: View) {

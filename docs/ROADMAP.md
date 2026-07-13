@@ -130,13 +130,34 @@ then build. Each item lists the concrete anchors found in the tree.
 
 ## Phase 3 — Product & UX
 
-- **TODO backlog (23 markers).** Notable functional gaps:
-  `BubbleFlowDraggable` (`// TODO: Implement me`, line 82), OOM handling in
-  `ContentView` (line 170), and DB cleanup in `DatabaseHelper`
-  ("refactor db code in future", `closeZZZ()`).
+- **TODO backlog.** Actual count is **20** markers, not 23 (stale estimate).
+  ~~`BubbleFlowDraggable`'s `// TODO: Implement me` (line 82)~~ **Done** —
+  vertical swipe on the centered tab now closes it via
+  `MainController.closeTab(tabView, true, true)`, matching the app's other
+  close-tab call sites (animated, with the undo prompt). ~~OOM handling in
+  `ContentView.AppForUrl.getIcon()` (line 170)~~ **Done** — `loadIcon()` is now
+  wrapped in `try/catch (OutOfMemoryError)`. The `DatabaseHelper` "refactor db
+  code in future"/`closeZZZ()` markers were mostly noise (`closeZZZ()` was in
+  dead, fully-commented-out code) but surfaced two real bugs while looking —
+  see Database layer below. Remaining ~17 are minor cosmetic/naming nits or in
+  vendored code (`de/jetwick/snacktory`, `org/mozilla/gecko/favicons`) — not
+  worth one-off fixes; a couple (duplicate "Twitter class name" TODO in
+  `MainApplication.kt`/`Util.kt`, the `SwipeDismiss*` "ensure this is a
+  finger" gesture nits) are candidates if the Database/WebView/Bubble items
+  below get picked up.
 - **Database layer.** `DatabaseHelper` is raw `SQLiteOpenHelper` with
-  self-flagged tech debt. Evaluate migrating to Room for type safety and
-  migrations.
+  self-flagged tech debt (2 tables, 13 methods, 6 external consumer files —
+  small-to-medium scope for a Room migration, not yet done). Found and fixed
+  two real bugs while surveying: `onUpgrade()` only dropped `linkHistory`, not
+  `favicons`, so any real version bump would've hit "table favicons already
+  exists" in `onCreate()`'s `CREATE TABLE` — now drops both. Also,
+  `getAllHistoryRecords()`/`getRecentNHistoryRecords()` opened `writableDatabase`
+  *inside* their `try` block with `db.close()` only reached on the success
+  path — an `IllegalStateException` mid-query leaked the connection instead of
+  closing it. Moved `db.close()` to `finally` and added the same
+  `CrashTracking.log(...)` other methods in this file already do on catch
+  (previously just a bare TODO comment, no logging). Room migration itself is
+  still open.
 - **WebView hardening.** ~18 files touch `WebView`/`WebSettings`. Audit for safe
   defaults (JS enablement scope, mixed content, file access, safe-browsing) and
   modern `WebViewAssetLoader` where applicable.

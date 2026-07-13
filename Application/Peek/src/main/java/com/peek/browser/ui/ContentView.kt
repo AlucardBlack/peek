@@ -167,9 +167,12 @@ class ContentView @JvmOverloads constructor(
 
         fun getIcon(context: Context): Drawable? {
             if (mIcon == null) {
-                // TODO: Handle OutOfMemory error
                 if (mResolveInfo != null) {
-                    mIcon = mResolveInfo!!.loadIcon(context.packageManager)
+                    try {
+                        mIcon = mResolveInfo!!.loadIcon(context.packageManager)
+                    } catch (e: OutOfMemoryError) {
+                        CrashTracking.log("AppForUrl.getIcon() OutOfMemoryError")
+                    }
                 }
             }
 
