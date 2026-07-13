@@ -26,7 +26,6 @@ import com.peek.browser.MainService
 import com.peek.browser.R
 import com.peek.browser.util.CrashTracking
 import com.peek.browser.util.EventBus
-import org.jsoup.helper.StringUtil
 import java.util.ArrayList
 
 class ExpandedActivity : Activity() {
@@ -278,7 +277,7 @@ class ExpandedActivity : Activity() {
                 if (filteredList.size == 0) {
                     i.type = "*/*"
                 } else {
-                    i.type = StringUtil.join(filteredList, ",")
+                    i.type = filteredList.joinToString(",")
                 }
                 startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE)
             }
