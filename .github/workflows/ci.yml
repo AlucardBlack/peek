@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Generate AndroidManifest.xml
+        run: cp Application/Peek/src/main/AndroidManifest.xml.template Application/Peek/src/main/AndroidManifest.xml
+
+      - name: Run unit tests
+        working-directory: Application
+        run: ./gradlew testPlaystoreDebugUnitTest
+
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-report
+          path: '**/build/reports/tests/**'
+
+  build-apk:
+    name: Build debug APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Install JS deps and copy JNI sources
+        run: npm run setup
+
+      - name: Install NDK and CMake
+        run: sdkmanager "ndk;28.2.13676358" "cmake;3.22.1"
+
+      - name: Generate AndroidManifest.xml
+        run: cp Application/Peek/src/main/AndroidManifest.xml.template Application/Peek/src/main/AndroidManifest.xml
+
+      - name: Assemble debug APK
+        working-directory: Application
+        run: ./gradlew assemblePlaystoreDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: playstore-debug-apk
+          path: '**/outputs/apk/**/*.apk'

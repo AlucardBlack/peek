@@ -1,6 +1,10 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+#!/bin/sh
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Copies the C++ ad-block sources from node_modules into the Android JNI dir.
+# Run from the repository root (paths below are repo-root-relative).
 
 cp -f node_modules/abp-filter-parser-cpp/ABPFilterParser.cpp ./Application/Peek/src/main/jni/ABPFilterParser.cpp
 cp -f node_modules/abp-filter-parser-cpp/ABPFilterParser.h ./Application/Peek/src/main/jni/ABPFilterParser.h

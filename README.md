@@ -18,7 +18,14 @@ carried over from the original project.
 Copy `Application/Peek/src/main/AndroidManifest.xml.template` to
 `Application/Peek/src/main/AndroidManifest.xml`.
 
-`npm install`
+`npm run setup`
+
+This installs the JavaScript dependencies and copies the C++ ad-block sources
+into the Android JNI directory. Use `npm run setup` rather than a bare
+`npm install`: on modern Node a plain install fails while trying to build the
+unused native addons of some transitive dependencies (`node-gyp rebuild`).
+`npm run setup` installs with `--ignore-scripts` and then copies the sources,
+which is all the Android build needs.
 
 ## Building
 
