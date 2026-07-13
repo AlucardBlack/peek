@@ -223,17 +223,17 @@ then build. Each item lists the concrete anchors found in the tree.
   get feedback, not a bug fix, and needs a physical device to feel right —
   left for a separate pass.
 
-## Phase 4 — Release & distribution
+## Phase 4 — Release & distribution ✅ Done for now (targetSdk 36 deferred to a dedicated session)
 
 - ~~**Signing/release flow.**~~ **Done** — added a "Release checklist" section
   to `CONTRIBUTING.md` (CI-green check, version bump, one-time
   `build-release.sh` setup from the template, build, sanity-check the output
   version, install-and-smoke-test on a device *before* uploading since release
   is the only build type that runs R8, upload, tag).
-- **ABI coverage.** `abiFilters` ships `arm64-v8a` + `x86_64` only. Whether
-  `armeabi-v7a` (older 32-bit devices, minSdk is 26) is worth including is a
-  market-reach-vs-APK-size call for whoever owns that decision — not
-  something to guess at from the code. Still open.
+- ~~**ABI coverage.**~~ **Decided: leave as-is.** `abiFilters` stays
+  `arm64-v8a` + `x86_64` only — minSdk 26 already excludes very old devices,
+  and 32-bit-only Android phones are increasingly rare/EOL, so `armeabi-v7a`
+  wasn't judged worth the APK-size/build-surface cost.
 - ~~**Play compliance.**~~ **Predictive-back flag fixed; targetSdk 36 bump
   still open, time-sensitive.** Added `android:enableOnBackInvokedCallback="true"`
   to `<application>` — the Phase 1 `onBackPressed()` migration registered
@@ -252,10 +252,12 @@ then build. Each item lists the concrete anchors found in the tree.
   submitted after Aug 31 needs targetSdk 36 — roughly 7 weeks out from today.
   compileSdk 36 platforms are already installed locally (`android-36`,
   `android-36.1`); current AGP is 8.5.2, and both a newer 8.x (8.13.2) and
-  9.x (9.2.1) line support it. Not attempted yet — Android 16's behavior
-  changes "activate the moment your app opts in" (edge-to-edge enforcement,
-  predictive-back, notification/full-screen-intent changes), so this needs
-  deliberate planning and on-device verification, not a same-session bump.
+  9.x (9.2.1) line support it. **Decided: not now** — deferred to a dedicated
+  session with device access, since Android 16's behavior changes "activate
+  the moment your app opts in" (edge-to-edge enforcement, predictive-back,
+  notification/full-screen-intent changes) need real on-device verification
+  before shipping, not a same-session bump. Revisit with enough runway before
+  Aug 31, 2026 (or Nov 1 with the extension) to actually test on a device.
   [Target API level requirements for Google Play apps](https://developer.android.com/google/play/requirements/target-sdk)
 
 ---
@@ -273,9 +275,17 @@ then build. Each item lists the concrete anchors found in the tree.
    haptics polish (deferred — a product decision needing a physical device,
    not a bug fix) and the Room async/coroutines rewrite (deferred —
    preserved existing synchronous/main-thread call sites instead).
-5. **Phase 4 (release & distribution) — next up**, or revisit the deferred
-   items above once there's a concrete reason to (device testing available,
-   product direction on haptics, etc.).
+5. ~~Phase 4 (release & distribution).~~ Done for now — release checklist
+   written, predictive-back flag fixed, ABI coverage decided (leave as-is).
+   **All four roadmap phases have had a pass.** What's left across all of
+   them is deferred work needing something this repo/session doesn't have
+   yet: device access (targetSdk 36 bump and its Android 16 behavior
+   changes, haptics polish, `startActivityForResult`'s Activity Result API
+   if a concrete reason shows up) or a product decision already made
+   (Room's async/coroutines rewrite skipped in favor of preserving existing
+   synchronous call sites). **Next up: pick one of those, or start a new
+   pass now that the codebase is in much better shape than this roadmap's
+   2026-07-13 baseline.**
 
 *Not yet prioritized against user demand — treat ordering as engineering-risk
 based, adjust once product goals are set.*
