@@ -69,13 +69,22 @@ then build. Each item lists the concrete anchors found in the tree.
   WebView file-chooser flow, `EntryActivity`'s vestigial one) — left as-is,
   revisit only if/when there's a concrete reason to touch the Activity Result
   API.
-- **Legacy theming.** `AppTheme` is already Material3-modernized. Gap is the
-  `<application>` default theme and 6 activities (`EntryActivity` + 5
-  `Notification*Activity`s via `TransparentTheme`, plus `ExpandedActivity` via
-  `ExpandedModeTheme`) still on `Theme.Holo.Light`-derived styles. Also found
-  4 apparently-dead Holo styles in `styles.xml` (`ActiveTheme`,
-  `ContentThemeBase`/`ContentTheme`, `SectionHeaderTheme`) with zero
-  references — cleanup candidates alongside the migration.
+- ~~**Legacy theming.**~~ **Done** — `<application>`'s default theme moved
+  from `@android:style/Theme.Holo.Light` to `@style/AppTheme` (only
+  `DefaultBrowserResetActivity` — an empty trampoline class with no
+  `onCreate` at all — was inheriting it, so this was a no-visual-risk
+  change). `TransparentTheme`/`ExpandedModeBaseTheme` were already moved off
+  Holo in the `onBackPressed()` migration above, so `EntryActivity` + the 5
+  `Notification*Activity`s and `ExpandedActivity` were already covered.
+  Deleted the confirmed-dead Holo styles (`ActiveTheme`,
+  `ContentThemeBase`/`ContentTheme`, `ActionBarStyle.Translucent`/
+  `.TitleTextStyle` — zero references anywhere). One survey miss corrected:
+  `SectionHeaderTheme` looked dead but is actually live (`view_section_header.xml`,
+  used by the sticky-header dialogs from Phase 2) — its `Theme.Holo.Light`
+  parent was vestigial regardless (applied via `style=` on a plain
+  `LinearLayout`, never consulted as an `android:theme`), so the parent was
+  dropped rather than the whole style. No remaining `Theme.Holo` references
+  outside the dead, already-commented-out `BubbleFlowActivity` manifest block.
 - **`android.enableJetifier=true`** in `gradle.properties` — no
   `com.android.support` dependency anywhere in the declared dependency list,
   so it looks safe to disable on paper, but transitive dependencies could
