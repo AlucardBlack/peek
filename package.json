@@ -4,7 +4,9 @@
   "description": "Peek Browser",
   "scripts": {
     "translate": "babel-node scripts/updateTranslations.js",
-    "postinstall": "sh ./scripts/copyJNIFiles.js",
+    "postinstall": "sh ./scripts/copyJNIFiles.sh",
+    "jni": "sh ./scripts/copyJNIFiles.sh",
+    "setup": "npm install --ignore-scripts && npm run jni",
     "lint": "semistandard Application/Peek/src/main/assets/pagescripts/*"
   },
   "repository": "AlucardBlack/peek",
