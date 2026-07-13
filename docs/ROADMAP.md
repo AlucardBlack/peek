@@ -49,15 +49,26 @@ then build. Each item lists the concrete anchors found in the tree.
   `onCancelled()` keeps firing to clean up `LoadFaviconTask`'s in-flight-loads
   map, matching the original Handler-based semantics exactly. Zero call-site
   changes needed for `LoadFaviconTask`/`BitmapUtils`/`Favicons`.
-- **`onBackPressed()` / `startActivityForResult`** — actual count is **16**
-  hits across 6 files (the "~58" estimate above was stale), not as large as
-  first thought. `ContentView.kt` has the roadmap's "four": three are
-  forwarding boilerplate (web/article-mode controller callbacks + a
-  back-key listener) that funnel into one real handler at `ContentView.kt:1532`.
-  `ExpandedActivity`'s `startActivityForResult` (WebView file-chooser flow)
-  is the one that actually needs the Activity Result API contract, not a
-  mechanical rename; `EntryActivity`'s looks vestigial (result never
-  consumed). Migrate to `OnBackPressedDispatcher` and Activity Result API.
+- ~~**`onBackPressed()` / `startActivityForResult`**~~ **`onBackPressed()` done,
+  `startActivityForResult` deferred.** Actual count was **16** hits across 6
+  files (the "~58" estimate above was stale), not as large as first thought.
+  Of those, only 2 were real deprecated `Activity.onBackPressed()` overrides —
+  `EntryActivity` and `ExpandedActivity` (the `ContentView.kt`/`WebRenderer`/
+  `ArticleRenderer` `onBackPressed()`s are this app's own internal
+  back-handling protocol for the floating-bubble overlay window, which has no
+  `Activity` to hand a callback to, and aren't part of the deprecated Android
+  API at all). Both `EntryActivity`/`ExpandedActivity` extended plain
+  `android.app.Activity`, so using `OnBackPressedDispatcher` meant migrating
+  them to `AppCompatActivity` first — done, along with moving
+  `TransparentTheme`/`ExpandedModeBaseTheme` off `Theme.Holo.Light` onto
+  `Theme.Material3.Light.NoActionBar` (`ExpandedActivity`'s native action bar
+  was hidden immediately in `onCreate()` and never shown again, so it was
+  dropped rather than ported to a support Toolbar; `ExpandedModeActionBar`
+  style deleted as dead with it). `startActivityForResult` isn't actually
+  flagged deprecated by the compiler on either class (`ExpandedActivity`'s
+  WebView file-chooser flow, `EntryActivity`'s vestigial one) — left as-is,
+  revisit only if/when there's a concrete reason to touch the Activity Result
+  API.
 - **Legacy theming.** `AppTheme` is already Material3-modernized. Gap is the
   `<application>` default theme and 6 activities (`EntryActivity` + 5
   `Notification*Activity`s via `TransparentTheme`, plus `ExpandedActivity` via

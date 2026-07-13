@@ -4,7 +4,6 @@
 
 package com.peek.browser.ui
 
-import android.app.Activity
 import android.app.ActivityManager
 import android.content.ComponentName
 import android.content.Context
@@ -19,6 +18,8 @@ import android.view.ViewGroup
 import android.webkit.ValueCallback
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import com.peek.browser.BuildConfig
 import com.peek.browser.Constant
 import com.peek.browser.MainController
@@ -28,7 +29,7 @@ import com.peek.browser.util.CrashTracking
 import com.peek.browser.util.EventBus
 import java.util.ArrayList
 
-class ExpandedActivity : Activity() {
+class ExpandedActivity : AppCompatActivity() {
 
     class MinimizeExpandedActivityEvent
 
@@ -72,7 +73,11 @@ class ExpandedActivity : Activity() {
 
         setContentView(R.layout.activity_expanded)
 
-        actionBar!!.hide()
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                delayedMinimize()
+            }
+        })
 
         registerForBus()
 
@@ -182,10 +187,6 @@ class ExpandedActivity : Activity() {
         overridePendingTransition(0, 0)
     }
 
-    override fun onBackPressed() {
-        delayedMinimize()
-    }
-
     fun registerForBus() {
         EventBus.subscribe(this, MinimizeExpandedActivityEvent::class.java, ::onMinimizeExpandedActivity)
         EventBus.subscribe(this, ShowFileBrowserEvent::class.java, ::onShowFileBrowserEvent)
@@ -205,7 +206,7 @@ class ExpandedActivity : Activity() {
         // check that the response is a good one
         if (requestCode == FILECHOOSER_RESULTCODE) {
             var results = arrayOf<Uri>()
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 if (intent != null) {
                     val dataString = intent.dataString
                     if (dataString != null) {

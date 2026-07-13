@@ -29,7 +29,10 @@
         <item name="android:paddingLeft">8dp</item>
     </style>
 
-    <style name="TransparentTheme" parent="android:Theme.Holo.Light">
+    <!-- Material3 parent (was android:Theme.Holo.Light) so AppCompatActivity consumers
+         (EntryActivity) don't crash; plain-Activity consumers (the Notification*Activity
+         redirect shims) work fine with any theme regardless. -->
+    <style name="TransparentTheme" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -142,25 +145,20 @@
     </style>
 
 
-    <style name="ExpandedModeBaseTheme" parent="android:Theme.Holo.Light">
+    <!-- Material3 NoActionBar parent (was android:Theme.Holo.Light + a manual
+         android:actionBarStyle/windowActionBarOverlay) so ExpandedActivity can become an
+         AppCompatActivity. The old native action bar was hidden immediately in onCreate() and
+         never shown again, so it's dropped outright rather than ported to a support Toolbar. -->
+    <style name="ExpandedModeBaseTheme" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:actionBarStyle">@style/ExpandedModeActionBar</item>
-        <item name="android:windowActionBarOverlay">true</item>
     </style>
 
     <style name="ExpandedModeTheme" parent="ExpandedModeBaseTheme"/>
-
-    <style name="ExpandedModeActionBar" parent="android:Widget.Holo.ActionBar">
-        <item name="android:height">@dimen/bubble_size</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:icon">@android:color/transparent</item>
-        <item name="android:displayOptions"></item>
-    </style>
 
 
 </resources>

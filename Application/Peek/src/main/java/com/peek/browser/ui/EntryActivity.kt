@@ -4,10 +4,11 @@
 
 package com.peek.browser.ui
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import android.widget.Toast
 import com.peek.browser.Config
@@ -19,7 +20,7 @@ import com.peek.browser.Settings
 import java.net.MalformedURLException
 import java.net.URL
 
-class EntryActivity : Activity() {
+class EntryActivity : AppCompatActivity() {
 
     private val mHandler = Handler()
 
@@ -36,6 +37,12 @@ class EntryActivity : Activity() {
         }
 
         super.onCreate(savedInstanceState)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                delayedFinishIfCurrent()
+            }
+        })
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, true)
 
@@ -117,10 +124,6 @@ class EntryActivity : Activity() {
     override fun onStop() {
         super.onStop()
 
-        delayedFinishIfCurrent()
-    }
-
-    override fun onBackPressed() {
         delayedFinishIfCurrent()
     }
 
