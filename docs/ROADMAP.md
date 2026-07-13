@@ -29,7 +29,7 @@ then build. Each item lists the concrete anchors found in the tree.
   scaffold and cover the pure-logic units first: `Config`, `Constant`,
   URL/search handling in `Util`, the ad-block whitelist collector.
 
-## Phase 1 — API modernization
+## Phase 1 — API modernization ✅ Mostly done (startActivityForResult deferred)
 
 - ~~**Retire `AsyncTask`** (deprecated). Live usages in `MainApplication`
   (`InitWhiteListCollectorAsyncTask`, `DownloadAdBlockDataAsyncTask`) and the
@@ -85,11 +85,14 @@ then build. Each item lists the concrete anchors found in the tree.
   `LinearLayout`, never consulted as an `android:theme`), so the parent was
   dropped rather than the whole style. No remaining `Theme.Holo` references
   outside the dead, already-commented-out `BubbleFlowActivity` manifest block.
-- **`android.enableJetifier=true`** in `gradle.properties` — no
-  `com.android.support` dependency anywhere in the declared dependency list,
-  so it looks safe to disable on paper, but transitive dependencies could
-  still need it; confirming requires an actual build with the flag off, not
-  just static analysis.
+- ~~**`android.enableJetifier=true`** in `gradle.properties`~~ **Done** —
+  flipped to `false`. `:Peek:dependencies` confirmed zero `com.android.support`
+  artifacts anywhere in the resolved runtime classpath (declared or
+  transitive); a clean `assemblePlaystoreDebug` + `testPlaystoreDebugUnitTest`
+  with the flag off both pass. (`assemblePlaystoreRelease` wasn't usable as a
+  cross-check either way — it fails before Jetifier even enters the picture,
+  on the missing `PEEK_KEYSTORE_*` env vars from the Phase 4 release-signing
+  item; confirmed identical failure with the flag untouched.)
 
 ## Phase 2 — Dependencies & security ✅ Done
 
@@ -159,9 +162,11 @@ then build. Each item lists the concrete anchors found in the tree.
 1. ~~Phase 0 (CI + tests + build fixes) — unblocks safe iteration.~~ Done.
 2. ~~Phase 2 (jsoup bump, dead UI libs, dead analytics, ad-block source
    check) — highest security/effort ratio.~~ Done.
-3. **Phase 1 AsyncTask→coroutines — next up.** Clears the biggest
-   deprecation cluster.
-4. Interleave Phase 3 product work against the TODO backlog.
+3. ~~Phase 1 (AsyncTask→coroutines, onBackPressed/theming/Jetifier) — clears
+   the biggest deprecation cluster.~~ Done, except `startActivityForResult`
+   (deferred — not actually compiler-flagged deprecated on either affected
+   class, so no concrete reason to touch the Activity Result API yet).
+4. **Interleave Phase 3 product work against the TODO backlog — next up.**
 
 *Not yet prioritized against user demand — treat ordering as engineering-risk
 based, adjust once product goals are set.*
