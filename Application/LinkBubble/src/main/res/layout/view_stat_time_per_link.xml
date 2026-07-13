@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/stat_container"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/stat_height"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:layout_marginBottom="40dp">
+
+    <com.peek.browser.ui.CondensedTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stat_saves_you"
+        android:layout_gravity="center_horizontal"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"/>
+
+    <com.peek.browser.ui.CondensedTextView
+        android:id="@+id/time_per_link"
+        android:layout_width="@dimen/stat_bubble_size"
+        android:layout_height="@dimen/stat_bubble_size"
+        android:layout_gravity="center_horizontal"
+        android:text="2.3\nseconds"
+        android:textColor="?attr/colorOnPrimary"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="@dimen/stat_bubble_text_size"
+        android:background="@drawable/stat_bubble_background"
+        tools:ignore="HardcodedText"/>
+
+    <com.peek.browser.ui.CondensedTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stat_per_link"
+        android:layout_gravity="center_horizontal"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"/>
+
+</LinearLayout>

@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="download_activity_label">Downloader</string>
+    <string name="send_intent_label">Open with Peek</string>
+    <string name="notification_summary">Touch to hide all open bubbles</string>
+    <string name="notification_default_summary">Touch to Hide, expand to Close All</string>
+    <string name="notification_unhide_summary">Touch to Unhide, expand to Close All</string>
+    <string name="notification_action_close_all">Close All</string>
+    <string name="notification_action_hide">Hide</string>
+    <string name="share_picker_label">Share picker</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="action_ok">OK</string>
+    <string name="action_open">Open</string>
+    <string name="action_remove">Remove</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_clear_data">Clear data</string>
+    <string name="action_use_default">Use default</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_help">Help</string>
+    <string name="action_reload_page">Reload</string>
+    <string name="action_open_in_browser">Open in %1$s</string>
+    <string name="action_request_desktop_site">Request desktop site</string>
+    <string name="action_site_protection">Enable Peek shields</string>
+    <string name="action_open_in_new_bubble">Open in new bubble</string>
+    <string name="action_open_link_in_new_bubble">Open link in new bubble</string>
+    <string name="action_open_image_in_new_bubble">Open image in new bubble</string>
+    <string name="action_copy_to_clipboard">Copy link</string>
+    <string name="action_save_image">Save image</string>
+    <string name="action_share">Share</string>
+    <string name="action_close_all">Close all</string>
+    <string name="action_new_bubble">New bubble</string>
+    <string name="action_close_tab">Close bubble</string>
+    <string name="action_stop">Stop</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_add">Add</string>
+    <string name="action_no_recommended">No (recommended)</string>
+    <string name="share_via">Share via…</string>
+    <string name="not_set">Not set</string>
+
+    <string name="error_saving_image">Error saving image.</string>
+    <string name="image_saved">Image downloaded.</string>
+    <string name="notice_download_started">Download started.</string>
+
+    <string name="warning">Warning!</string>
+    <string name="untrusted_certificate">The certificate at %1$s is not trusted. Proceed anyway?</string>
+
+    <string name="share_invalid_data">Peek is unable to share this item as it is not a valid URL.</string>
+    <string name="consume_activity_not_found">Unable to find application. Consider changing bubble action via Settings.</string>
+    <string name="consume_activity_security_exception">Unable to share to external application.</string>
+
+    <string name="upgrade">Upgrade</string>
+    <string name="upgrade_theme">Want to use a different theme?</string>
+    <string name="upgrade_theme_toolbar">Want to theme the toolbar to match the theme color of websites?</string>
+
+    <string name="undo_close_tab_title">Closed %1$s</string>
+    <string name="undo_close_tab_no_title">Closed tab</string>
+
+    <string name="pick_default_app">Select default app</string>
+    <string name="default_browser_set">Peek has been set as the default browser.</string>
+    <string name="invalid_send_action">Valid link not found.</string>
+    <string name="unable_to_launch_app">Unable to launch 3rd party application.</string>
+    <string name="clear_history">Clear history</string>
+
+    <string name="preference_category_general">General</string>
+    <string name="preference_category_configuration">App Controls</string>
+    <string name="preference_category_configuration2">Configuration</string>
+    <string name="preference_category_browser">Browser</string>
+    <string name="preference_enabled_title">Enabled</string>
+    <string name="preference_auto_content_display_link_loaded_title">Auto expand</string>
+    <string name="preference_auto_content_display_link_loaded_summary">When any bubble has finished loading</string>
+
+    <string name="preference_left_consume_bubble_title">Left bubble</string>
+    <string name="preference_right_consume_bubble_title">Right bubble</string>
+    <string name="preference_double_tap_title">Link double tap</string>
+    <string name="preference_configure_bubble_title">Configure bubble</string>
+    <string name="preference_category_debug">Debug</string>
+    <string name="preference_default_browser">Default fallback browser</string>
+    <string name="preference_category_redirect_to_browser">Redirect to fallback browser</string>
+    <string name="preference_category_fallback_browser">Default fallback browser</string>
+    <string name="preference_category_other_apps">Other apps</string>
+    <string name="preference_default_apps_title">Default apps</string>
+    <string name="preference_default_apps_summary">Fallback browser, url-specific apps</string>
+    <string name="preference_default_apps_notice_summary">Used when one or more non-browser apps on your system can handle a
+                    URL.\n\nTap to remove a default.</string>
+    <string name="preference_default_apps_notice_no_defaults_summary">Used when one or more non-browser apps on your device can handle a URL,
+                you can configure the default app to load such links with.\n\nThe default app to use in this case is configured as
+                you load links with Peek.</string>
+    <string name="preference_google_account_redirect_title">Google Account redirect</string>
+    <string name="preference_google_account_redirect_summary">Redirect accounts.google.com links to default fallback browser</string>
+    <string name="preference_set_default_browser_title">Set default system browser</string>
+    <string name="preference_set_default_browser_summary">Peek must be the default system browser to work. Tap to configure.</string>
+    <string name="preference_more">More…</string>
+    <string name="preference_intercept_links_from_title">Intercept links from</string>
+    <string name="preference_intercept_links_from_disabled_for_L">As of Android 5.0, Google have removed the API required for this functionality.</string>
+    <string name="preference_scan_for_youtube_embeds_title">Check for YouTube embeds</string>
+    <string name="preference_scan_for_youtube_embeds_summary">Display shortcut to load embedded video(s) in the YouTube app.</string>
+    <string name="preference_webview_battery_save_title">Battery Save Mode (Beta)</string>
+    <string name="preference_webview_battery_save_aggressive_title">Aggressive</string>
+    <string name="preference_webview_battery_save_aggressive_summary">Pause the updating of web pages when Peek is minimized.\nPages in the process of loading will finish loading before pausing.</string>
+    <string name="preference_webview_battery_save_default_title">Default</string>
+    <string name="preference_webview_battery_save_default_summary">Pause the updating of web pages when the screen is off and resume when your device is unlocked.\nPages in the process of loading will finish loading before pausing.</string>
+    <string name="preference_webview_battery_save_off_title">Off</string>
+    <string name="preference_webview_battery_save_off_summary">Web pages are always active. Useful when streaming YouTube videos and the like.</string>
+    <string name="preference_theme_title">Theme</string>
+    <string name="preference_theme_light_color">Light + icon color</string>
+    <string name="preference_theme_light_no_color">Light + neutral color</string>
+    <string name="preference_theme_dark_color">Dark + icon color</string>
+    <string name="preference_theme_dark_no_color">Dark + neutral color</string>
+    <string name="preference_theme_toolbar_title">Color toolbar</string>
+    <string name="preference_theme_toolbar_summary">To match a website\'s theme color/icon highlight color.</string>
+    <string name="preference_article_mode_title">Reading Mode</string>
+    <string name="preference_reading_mode_on_wear_title">Reading Mode on Wear</string>
+    <string name="preference_article_mode_summary">Toggled via button on action bar</string>
+    <string name="preference_webview_text_zoom_title">Text zoom</string>
+    <string name="preference_webview_text_zoom_note">Note: Current bubbles will be reloaded with the new text zoom applied after selecting \"OK\".</string>
+    <string name="preference_webview_text_zoom_reloading_current">New text zoom level applied. Reloading current bubbles…</string>
+    <string name="preference_clear_browser_cache_title">Clear private data</string>
+    <string name="preference_clear_cache">Cache</string>
+    <string name="preference_clear_cookies">Cookies</string>
+    <string name="preference_clear_favicons">Favicons</string>
+    <string name="preference_clear_form_data">Form data</string>
+    <string name="preference_clear_history">History</string>
+    <string name="preference_clear_passwords">Passwords</string>
+    <string name="preference_incognito_title">Incognito Mode</string>
+    <string name="preference_incognito_summary">Prevent storing all history and cookies</string>
+    <string name="preference_hide_bubbles_title">Hide Bubbles on scroll</string>
+    <string name="preference_hide_bubbles_summary">Hide Bubbles on scroll down and show on scroll up</string>
+    <string name="incognito_mode_changed_reloading_current">Incognito setting changed. Reloading current bubbles…</string>
+    <string name="preference_adblock_title">Ad Block</string>
+    <string name="preference_adblock_summary">Block ads and trackers</string>
+    <string name="preference_block_3p_cookies_title">Block Third Party Cookies</string>
+    <string name="preference_block_3p_cookies_summary">Stops some types of tracking by advertisers</string>
+    <string name="preference_user_agent_title">User Agent</string>
+    <string-array name="preference_user_agent_options">
+        <item>Default</item>
+        <item>Chrome Phone</item>
+        <item>Chrome Tablet</item>
+        <item>Chrome Desktop</item>
+    </string-array>
+
+    <string name="preference_domains_title">Domain redirects</string>
+    <string name="preference_domains_summary">Specify links to always load in your fallback browser.</string>
+    <string name="preference_redirects_title">Redirect to fallback browser</string>
+    <string name="preference_add_domain_title">Add domain</string>
+    <string name="add_domain_hint">Url host</string>
+    <string name="add_domain_detail">Specify only the \'main\' portion of a website address. E.g.,
+        \"accounts.google.com\" or \"bbc.co.uk\".</string>
+    <string name="add_domain_error">Unable to add \"%1$s\", as it is not a valid URL host.</string>
+
+    <string name="preference_help_title">Help</string>
+    <string name="preference_credits_title">Credits</string>
+    <string name="preference_osl_title">Open source licenses</string>
+    <string name="preference_say_thanks_title">Say thanks!</string>
+    <string name="preference_say_thanks_summary">Enjoying Peek? Please consider leaving a Play Store review.</string>
+    <string name="preference_version_title">Version</string>
+    <string name="preference_version_summary">What\'s new?</string>
+    <string name="preference_more_title">More&#8230;</string>
+    <string name="preference_show_undo_close_tab_title">Undo close tab prompt</string>
+
+    <string name="preference_my_other_apps_title">More apps by Peek</string>
+    <string name="preference_my_other_apps_summary">Like Peek? Why not check out our other apps?</string>
+
+    <string name="remove_default_title">Remove default?</string>
+    <string name="remove_default_message">Remove %1$s as the default app to load %2$s links with?\n\nNote: you can set a new default app to use next
+                                            time you load a %2$s link.</string>
+    <string name="long_press_unsupported_default_browser">Unable to display this item. Open link in %1$s?</string>
+    <string name="long_press_unsupported_no_default_browser">Unable to display this item. Open link in a browser.</string>
+    <string name="unsupported_scheme_default_browser">Link type currently not supported. Open web page in %1$s?</string>
+    <string name="unsupported_scheme_no_default_browser">Link type currently not supported. Open the link in a browser.</string>
+    <string name="unsupported_scheme">Link type currently not supported.</string>
+    <string name="unsupported_drop_down_default_browser">Unable to interact with this item. Open in %1$s?</string>
+    <string name="unsupported_drop_down_no_default_browser">Unable to interact with this item. Open link in a browser.</string>
+
+    <string name="consume_category_view">View link</string>
+    <string name="consume_category_share">Send/share link</string>
+
+    <string name="title_settings">Settings</string>
+
+    <string name="title_youtube_embed_to_load">Select video to play</string>
+    <string name="loading_youtube_embed_info">Fetching info about YouTube videos…</string>
+    <string name="youtube_embed_error_title">Oops</string>
+    <string name="youtube_embed_error_summary">Unable to retrieve info about YouTube videos at this time. Please try again later.</string>
+
+    <string name="loading">Loading…</string>
+
+    <string name="histroy_unread">Unread</string>
+    <string name="histroy_all">All</string>
+    <string name="new_bubble">New Bubble</string>
+    <string name="history">History</string>
+    <string name="erase_all_history_title">Erase all?</string>
+    <string name="erase_all_history_message">Erase your entire Peek browsing history?</string>
+    <string name="empty">Empty</string>
+    <string name="history_already_empty">History already empty</string>
+    <string name="private_data_cleared">Private data cleared</string>
+    <string name="private_data_cleared_reloading_current">Private data cleared. Reloading current bubbles…</string>
+    <string name="user_agent_changed_reloading_current">User Agent changed. Reloading current bubbles…</string>
+    <string name="theme_toolbar_reloading_current">Color toolbar setting changed. Reloading current bubbles…</string>
+    <string name="article_mode_changed_reloading_current">Reading Mode setting changed. Reloading current bubbles…</string>
+    <string name="link_loaded_with_app">Loaded with %1$s</string>
+    <string name="link_redirected">Redirected to %1$s</string>
+
+    <string name="tampered_apk">Your copy of Peek has been illegally modified and thus will not work reliably. Please reinstall from the Play Store.</string>
+
+    <string name="bubble_link_copied_to_clipboard">Bubble link copied to clipboard.</string>
+    <string name="link_copied_to_clipboard">Link copied to clipboard.</string>
+
+    <string name="stat_saves_you">saves you</string>
+    <string name="stat_has_saved_you">has saved you</string>
+    <string name="stat_so_far">so far</string>
+    <string name="stat_per_link">per link</string>
+    <string name="time_seconds">seconds</string>
+    <string name="time_minutes">minutes</string>
+    <string name="time_hours">hours</string>
+
+    <string name="confirm_title">Confirm</string>
+
+    <string name="no_default_browser">No default browser found on the system.</string>
+
+    <string name="title_changelog">Change log</string>
+    <string name="changelog_close">Close</string>
+
+    <string name="faq_close_tab_question">How can I quickly close a tab?</string>
+    <string name="faq_close_tab_answer">Pressing the hardware Back button is the fastest way. Flicking a tab onto the Close button is another good way.</string>
+    <string name="faq_back_button_minimize_question">I think pressing the Back button should minimize the browser!</string>
+    <string name="faq_back_button_minimize_answer"><![CDATA[Minimizing Peek when the hardware Back button is pressed is not feasible.
+            Consider the following case:<br/>
+            1). example.com/page1 is loaded in the first tab.<br/>
+            2). You click a link on this page, and load example.com/page2 in the same tab.<br/>
+            3). You now want to go back to the link in step 1.<br/><br/>
+            How do you do this if pressing the hardware Back button minimizes Peek? Pressing the tiny back indicator on the
+            tab itself is not feasible.<br/><br/>
+            Peek is a browser, and Android browsers have a long since established standard of
+            either going back in the URL stack, or if no such stack exists, closing the current page when the Back button is pressed.
+            Peek follows this standard.]]></string>
+    <string name="faq_app_internal_browser_question"><![CDATA[Peek isn\'t intercepting links!]]></string>
+    <string name="faq_app_internal_browser_answer"><![CDATA[There are 3 causes of this:<br/>
+            1). A browser other thank Peek is set as your default system browser. See the
+            \"Set default system browser\" option in Peek\'s Settings to change this.<br/>
+            2). Peek has been configured not to intercept links from your current app. See the
+            \"Intercept links from\" option in Peek\'s Settings.<br/>
+            3). Apps such as Talon, Reddit is Fun and others have inbuilt browsers that render links. Check the settings of that app and
+            enable \"External browser\" or deselect \"Integrated browser\" or similar.
+            <br/><br/>Note: other browser apps such as Chrome are hardcoded to load links in themselves, and thus Peek is unable
+            to load links clicked from other browser apps.
+            ]]></string>
+    <string name="faq_article_mode_question">How do I use Reading Mode? Why do some links not work?</string>
+    <string name="faq_article_mode_answer"><![CDATA[Firstly, ensure Reading Mode is enabled (Settings -> App Controls / More&#8230; -> Reading Mode).<br/><br/>
+            From that point, when Reading Mode is available for the current tab, the Reading Mode icon will display on the action bar (next to the Share button).
+            Be aware that this icon only appears after the link has finished loading, and only if Peek successfully extracted content for Article Mode from the link.<br/><br/>
+            Note: Extracting content from the web is an unreliable process, and may not work 100% accurately. Given the dynamic and ever-changing nature of the web itself,
+            there is little than can be done here.]]></string>
+    <string name="faq_future_features_question">Will you add support for bookmarks, favorites, extensions, etc.?</string>
+    <string name="faq_future_features_answer">Never say never, but for now Peek is focused solely on being the best possible way of loading
+            and consuming links loaded from other apps.</string>
+    <string name="faq_roadmap_question">Do you publish a feature roadmap? Can I up-vote upcoming features?</string>
+    <string name="faq_roadmap_answer">For competitive reasons, the answer to both of these questions is \'no\' I\'m afraid.</string>
+    <string name="faq_cant_type_url_question">How do I type the name of the link I want to visit?</string>
+    <string name="faq_cant_type_url_answer"><![CDATA[Just tap on the page / URL title.  It will change to an edit control and provide suggestions based on your history and top sites.]]></string>
+    <string name="faq_copy_text_question">Why can\'t I copy text from a web page?</string>
+    <string name="faq_copy_text_answer"><![CDATA[Unfortunately Android system limitations prevent this from working.<br/><br/>Technical answer:
+            Copy functionality works when using Android\'s WebView from an Activity, but not from a Service (which Peek uses).]]></string>
+    <string name="faq_low_spec_performance_question">Why does Peek run slowly on my Nexus S / Galaxy S1 / Moto G class device?</string>
+    <string name="faq_low_spec_performance_answer"><![CDATA[Peek is a very resource intensive app, and consequently devices with lower specs
+            can struggle to run the app as well as more powerful devices. Future updates will aim to improve Peek\'s
+            performance, but there is only so much that can realistically be done here.<br/><br/>Technical answer: At the bare minimum, Peek requires the
+            use of a Service and a WebView in order to function. Often multiple WebViews and even multiple Activities are also present.
+            Naturally, allocating these items (especially the WebViews) consumes a <i>lot</i> of memory/resources. Lower spec devices generally
+            have less memory available than Peek requires, and thus performance suffers as garbage collections are frequently triggered.
+            As an example, the max heap size on the Nexus S is 48MB, compared to 192MB on the Nexus 5.]]></string>
+    <string name="faq_crap_webview_question">Sometimes web pages don\'t display correctly or videos don\'t play.</string>
+    <string name="faq_crap_webview_answer"><![CDATA[Peek uses the standard Android WebView, but unfortunately it is sometimes unreliable.
+            Alternative web rendering methods such as FireFox\'s GeckoView and Chromium will likely be investigated going
+            forward.<br/><br/>In the event a web page doesn\'t display correctly in Peek, the easiest thing to do is just to load a traditional browser for that link.]]></string>
+    <string name="faq_close_quickly_question">How can I quickly stop Peek from running?</string>
+    <string name="faq_close_quickly_answer">Swipe from the top of the screen to open the notifications pane and click the \"Peek\" notification.</string>
+    <string name="faq_change_default_browser_question">How can I remove Peek as the default browser?</string>
+    <string name="faq_change_default_browser_answer">System Settings -> Apps -> Downloaded -> Peek -> Clear defaults.</string>
+    <string name="faq_report_bug_question">Report a bug</string>
+    <string name="faq_report_bug_answer"><![CDATA[email]]></string>
+
+    <string name="faq_title">FAQ</string>
+    <string name="preference_faq_summary">Question about the app? Try here.</string>
+    <string name="faq_section_general">General</string>
+    <string name="faq_section_functionality">App functionality</string>
+    <string name="faq_section_issues">Issues</string>
+
+    <string name="activity_resolver_use_always">Always</string>
+    <string name="activity_resolver_use_once">Just once</string>
+
+    <string name="credits_title">Peek Credits</string>
+    <string name="credits_name">Peek</string>
+    <string name="credits_credit">Concept, design and programming</string>
+    <string name="credits_app_copyright">Copyright 2015, Peek.</string>
+
+    <string name="restore_tabs_from_previous_session"></string>
+    <plurals name="restore_tabs_from_previous_session">
+        <item quantity="one">Restore tab from previous session?</item>
+        <item quantity="other">Restore %d tabs from previous session?</item>
+    </plurals>
+
+    <string name="content_description_button">Button</string>
+    <string name="content_description_target_icon">Bubble target icon</string>
+    <string name="content_description_close_bubble_icon">Close bubble icon</string>
+    <string name="content_description_link_bubble_logo">Peek logo</string>
+    <string name="content_description_app_icon">App icon</string>
+    <string name="content_description_youtube_video_thumbnail">YouTube video thumbnail</string>
+    <string name="content_description_history">History</string>
+    <string name="content_description_settings">Settings</string>
+    <string name="content_description_can_go_back">Can go back</string>
+
+    <string name="accept_terms_and_privacy">By continuing, you acknowledge that this app runs as a floating bubble with permission to display over other apps, and that links you open are loaded in its browser view.</string>
+
+    <string name="service_name">Peek Renderer</string>
+    <string name="notification_title">Peek</string>
+    <string name="notification_channel_name">Peek</string>
+
+    <string name="store_listing_title">Peek</string>
+    <string name="store_listing_promo_text">Mobile browsing done right.</string>
+    <string name="store_listing_description_title">Peek is an all-new browser designed and crafted solely with mobile devices in mind.</string>
+    <string name="store_listing_description_features">
+    Features include:
+    • When you click on a link in an app, Peek loads that web page in the background, leaving you free to keep using your current app rather than your precious time being wasted watching a page load. Once the page has fully loaded, it will animate on screen.
+    • Peek\'s flick physics allow you to go from clicking a link to sharing a link or adding it to a service such as Pocket in little more than a second!
+    • Load multiple links from your current app at the same time.
+    • Gracefully handles links that redirect to other apps. No longer does clicking an Instagram link in Twitter redirect to a full screen browser before loading Instagram!
+    • Deep integration with the apps on your system.
+    • Locates embedded YouTube videos on web pages, and provides a shortcut to load those videos directly in the YouTube app.
+    • Handy stats that illustrate how much time you are saving by using Peek.
+    </string>
+    <string name="store_listing_description_location_permission">Regarding the Location permission: This is required so that you might grant permission for a website to access your location (such as those with an embedded map). Peek itself never accesses your location.</string>
+
+    <string name="welcome_page_title">Welcome to Peek!</string>
+    <string name="welcome_page_intro_title">How does it work?</string>
+    <string name="welcome_page_intro_point_1">Click a link in an app.</string>
+    <string name="welcome_page_intro_point_2">A bubble will appear on the edge of the screen and the link will begin loading in the background. As soon as the page is loaded, it will be displayed.</string>
+    <string name="welcome_page_intro_end">It\'s that simple! With Peek, you can keep using your current app rather than wasting your time watching links redirect and waiting for pages to load. What\'s not to love about that?</string>
+    <string name="welcome_page_more_title">Show me more!</string>
+    <string name="welcome_page_more_pocket_start">You can also quickly share a link or add it to an app such as Pocket:</string>
+    <string name="welcome_page_more_pocket_end">Looks both fun and useful right?</string>
+    <string name="welcome_page_more_also">Peek also:</string>
+    <string name="welcome_page_more_point_1">Redirects links to a dedicated app (E.g., Instagram).</string>
+    <string name="welcome_page_more_point_2">Finds embedded videos so you can easily load them in the YouTube app.</string>
+    <string name="welcome_page_more_point_3">Load unlimited bubbles at once.</string>
+    <string name="welcome_page_more_point_4">Load links from all apps.</string>
+    <string name="welcome_page_ps">PS. To close this bubble, either press the Back button or long press the bubble and flick it onto the Close bubble.</string>
+
+    <string name="duplicate_link_will_not_be_loaded">Link already loaded. Ignoring...</string>
+
+    <string name="edit_url">Search or enter address</string>
+    <string name="http_prefix">http://</string>
+    <string name="https_prefix">https://</string>
+    <string name="www_prefix">www.</string>
+    <string name="duckduckgo_search_engine">https://duckduckgo.com/?q=%1$s&amp;t=peek</string>
+    <string name="google_search_engine">http://www.google.com/search?q=</string>
+    <string name="yahoo_search_engine">http://search.yahoo.com/search?p=</string>
+    <string name="amazon_search_engine">http://www.amazon.com/s/field-keywords=</string>
+    <string name="top_500_prepend">Visit</string>
+    <string name="url_bar_constraint_text_color">\'#4A4A4A\'</string>
+    <string name="search_for_with">Search %1$s for \"%2$s</string>
+    <string name="duck_duck_go">Duck Duck Go</string>
+    <string name="google">Google</string>
+    <string name="yahoo">Yahoo</string>
+    <string name="amazon">Amazon</string>
+    <string name="empty_bubble_page">file:///android_asset/blank.html</string>
+    <string name="adblock_url">https://easylist.to/easylist/easylist.txt</string>
+    <string name="adblock_localfilename">easylist.txt</string>
+    <string name="adprivacy_url">https://easylist.to/easylist/easyprivacy.txt</string>
+    <string name="adprivacy_localfilename">easyprivacy.txt</string>
+    <string name="whitelist_localfilename">whitelist.dat</string>
+
+    <string name="grant_overlay_permission_message">Peek needs permission to display over other apps to show the bubble. Tap below to grant it.</string>
+    <string name="grant_overlay_permission_button">Open Settings</string>
+    <string name="overlay_permission_required">Peek needs the \"display over other apps\" permission to show bubbles</string>
+
+</resources>

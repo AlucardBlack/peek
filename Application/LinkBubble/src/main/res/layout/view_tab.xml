@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.peek.browser.ui.TabView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/bubble_pager_item_width"
+    android:layout_height="@dimen/bubble_size"
+    >
+
+    <com.peek.browser.ui.BubblePlateView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/background"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center"
+        tools:ignore="ContentDescription"/>
+
+    <!--
+    <com.peek.browser.ui.ProgressIndicator
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_height="@dimen/progress_bar_size"
+        android:id="@+id/progressIndicator"
+        android:indeterminate="true"
+        android:layout_gravity="center"
+        android:progressDrawable="@drawable/loading_grey"/>
+    -->
+
+    <!--
+    <com.peek.browser.ui.ProgressIndicator
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/progressIndicator"
+        android:layout_gravity="center"/>-->
+
+    <com.peek.browser.ui.ProgressIndicatorView
+        android:layout_width="@dimen/bubble_icon_size"
+        android:layout_height="@dimen/bubble_icon_size"
+        android:id="@+id/progressIndicator"
+        android:layout_gravity="center"
+        />
+
+    <org.mozilla.gecko.widget.FaviconView
+        android:layout_width="@dimen/bubble_favicon_size"
+        android:layout_height="@dimen/bubble_favicon_size"
+        android:id="@+id/favicon"
+        android:scaleType="centerInside"
+        android:src="@drawable/fallback_favicon"
+        android:layout_gravity="center"/>
+
+    <ImageView
+        android:id="@+id/back_indicator"
+        android:layout_width="@dimen/back_indicator_size"
+        android:layout_height="@dimen/back_indicator_size"
+        android:layout_marginLeft="@dimen/badge_margin"
+        android:layout_marginRight="@dimen/badge_margin"
+        android:layout_marginTop="@dimen/badge_margin"
+        android:layout_gravity="top|left"
+        android:contentDescription="@string/content_description_can_go_back"/>
+
+</com.peek.browser.ui.TabView>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preference_default_apps_root">
+
+    <Preference
+        android:title="@string/preference_category_fallback_browser"
+        android:key="preference_default_browser"
+        />
+
+    <PreferenceCategory
+        android:key="preference_category_other_apps"
+        android:title="@string/preference_category_other_apps"
+        android:layout="@layout/preference_category_material">
+
+        <Preference
+            android:key="preference_default_apps_notice"
+            android:summary="@string/preference_default_apps_notice_summary"
+            />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

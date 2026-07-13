@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="AcceptTermsText">
+        <item name="android:layout_width">400dp</item>
+    </style>
+
+</resources>

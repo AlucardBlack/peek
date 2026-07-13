@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.peek.browser.ui.ContentView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_header"/>
+
+    <FrameLayout
+        android:id="@+id/content_edit_url"
+        android:focusable="true"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_marginTop="@dimen/toolbar_header"
+        android:background="#ffffffff">
+
+        <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/autocomplete_top500websites"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/search_url_height"
+            android:singleLine="true"
+            android:background="@null"
+            android:layout_marginRight="150px"
+            android:paddingLeft="5dp"
+            android:hint="@string/edit_url"
+            android:layout_alignParentLeft="true"
+            android:imeOptions="actionGo"
+            android:completionThreshold="1"
+            android:dropDownWidth="match_parent"
+            android:dropDownAnchor="@+id/content_edit_url"
+            android:dropDownSelector="?android:attr/listChoiceBackgroundIndicator"
+            android:popupBackground="@drawable/dropdown_background_light"
+            android:inputType="textUri"
+            android:layout_gravity="center_vertical"
+            android:textIsSelectable="true"
+            android:textSize="16dp" />
+
+        <ImageButton android:id="@+id/search_url_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40px"
+            android:background="@drawable/search_url_button_selector"
+            android:layout_alignParentRight = "true"
+            android:baselineAlignBottom="false"
+            android:clickable="true"
+            android:layout_gravity="right|center_vertical" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/content_toolbar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:background="@color/color_content_view_light"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_marginTop="@dimen/toolbar_header">
+
+        <LinearLayout
+            android:id="@+id/content_text_container"
+            android:orientation="vertical"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <com.peek.browser.ui.CondensedTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#555555"
+                android:singleLine="true"
+                android:clickable="false"
+                android:duplicateParentState="true"
+                android:id="@+id/title_text"/>
+
+            <com.peek.browser.ui.CondensedTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:paddingBottom="2dp"
+                android:textColor="#555555"
+                android:singleLine="true"
+                android:clickable="false"
+                android:duplicateParentState="true"
+                android:id="@+id/url_text"/>
+
+        </LinearLayout>
+
+        <com.peek.browser.ui.OpenInAppButton
+            style="@style/ToolbarButton"
+            android:id="@+id/open_in_app_button"
+            android:visibility="invisible"
+            />
+
+        <com.peek.browser.ui.ContentViewButton
+            style="@style/ToolbarButton"
+            android:id="@+id/reload_button"
+            android:visibility="gone"
+            />
+
+        <com.peek.browser.ui.ArticleModeButton
+            style="@style/ToolbarButton"
+            android:id="@+id/article_mode_button"
+            android:visibility="gone"/>
+
+        <com.peek.browser.ui.ContentViewButton
+            style="@style/ToolbarButton"
+            android:id="@+id/share_button"
+            />
+
+        <com.peek.browser.ui.ContentViewButton
+            style="@style/ToolbarButton"
+            android:id="@+id/overflow_button"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/web_renderer_placeholder"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="@dimen/webview_margin_top"/>
+
+    <View
+        android:id="@+id/article_renderer_placeholder"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="@dimen/webview_margin_top"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/actionbar_shadow"
+        android:layout_width="fill_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/action_bar_shadow"
+        android:layout_marginTop="@dimen/webview_margin_top"
+        tools:ignore="ContentDescription"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:id="@+id/caret_layout"
+        android:layout_height="@dimen/toolbar_header">
+
+    <ImageView
+        android:layout_height="fill_parent"
+        android:layout_width="0dp"
+        android:layout_weight="50"
+        android:layout_gravity="left"
+        android:background="@drawable/content_view_top_shadow"
+        tools:ignore="ContentDescription"/>
+
+        <FrameLayout
+            android:layout_width="12dp"
+            android:layout_height="@dimen/toolbar_header">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/content_view_caret_shadow"
+                tools:ignore="ContentDescription"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/caret"
+                android:layout_gravity="center_horizontal"
+                tools:ignore="ContentDescription"/>
+        </FrameLayout>
+
+
+    <ImageView
+        android:layout_height="fill_parent"
+        android:layout_width="0dp"
+        android:layout_weight="50"
+        android:layout_gravity="right"
+        android:background="@drawable/content_view_top_shadow"
+        tools:ignore="ContentDescription"/>
+
+    </LinearLayout>
+
+</com.peek.browser.ui.ContentView>

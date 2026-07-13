@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog>
+    <release version="1.9.58">
+        <change>NEW: Renamed to Peek.</change>
+    </release>
+    <release version="1.9.56">
+        <change>BUG FIX: Fixed an unresponsive screen problem that could appear on Android N when collapsing bubbles.</change>
+    </release>
+    <release version="1.9.54">
+        <change>NEW: Added Android N support.</change>
+        <change>NEW: Added several fallback browsers.</change>
+    </release>
+    <release version="1.9.52">
+        <change>BUG FIX: Reverted web view in the activity to bring back bubbles showing when the home button is pressed.</change>
+    </release>
+    <release version="1.9.19">
+        <change>BUG FIX: Fixed a back button issue on thestar.com.</change>
+        <change>BUG FIX: WebViews were not destroying on Close All bubbles command.</change>
+        <change>BUG FIX: Fixed incognito mode.</change>
+        <change>BUG FIX: Fixed a crash sometimes in open in Application dialog.</change>
+        <change>BUG FIX: Fixed a crash when changing a WebView's settings.</change>
+    </release>
+    <release version="1.9.18">
+        <change>BUG FIX: Fixed a back button issue on thestar.com.</change>
+        <change>BUG FIX: WebViews were not destroying on Close All bubbles command.</change>
+        <change>BUG FIX: Fixed incognito mode.</change>
+        <change>BUG FIX: Fixed a crash sometimes in open in Application dialog.</change>
+        <change>BUG FIX: Fixed a crash when changing a WebView's settings.</change>
+    </release>
+    <release version="1.9.17">
+        <change>BUG FIX: Fixed a back button issue on websites with anchors.</change>
+        <change>BUG FIX: Fixed a crash that appears sometimes on close and refresh bubble.</change>
+        <change>NEW: Added Chromium to fallback browser list.</change>
+    </release>
+    <release version="1.9.16">
+        <change>BUG FIX: Fixed a back button issue on websites with anchors.</change>
+        <change>BUG FIX: Fixed a crash that appears sometimes on close and refresh bubble.</change>
+        <change>NEW: Added Chromium to fallback browser list.</change>
+    </release>
+    <release version="1.9.15">
+        <change>BUG FIX: Fixed a back button issue on websites with anchors.</change>
+        <change>BUG FIX: Fixed a crash that appears sometimes on close and refresh bubble.</change>
+        <change>NEW: Added Chromium to fallback browser list.</change>
+    </release>
+    <release version="1.9.14">
+        <change>BUG FIX: Fixed an issue with rendering text sometimes instead HTML.</change>
+        <change>BUG FIX: Fixed streaming content in background on Marshmallow.</change>
+        <change>BUG FIX: Fixed problem with bubble bar being left behind when closing while bubble bar animation was showing.</change>
+    </release>
+    <release version="1.9.13">
+        <change>BUG FIX: Fixed an issue with rendering text sometimes instead HTML.</change>
+        <change>BUG FIX: Fixed streaming content in background on Marshmallow.</change>
+        <change>BUG FIX: Fixed problem with bubble bar being left behind when closing while bubble bar animation was showing.</change>
+    </release>
+    <release version="1.9.12">
+        <change>BUG FIX: Fixed problem with bubble bar being left behind when closing while bubble bar animation was showing.</change>
+        <change>BUG FIX: Fixed top crashes.</change>
+    </release>
+    <release version="1.9.11">
+        <change>BUG FIX: Fixed problem with bubble bar being left behind when closing while bubble bar animation was showing.</change>
+        <change>BUG FIX: Fixed top crashes.</change>
+    </release>
+    <release version="1.9.10">
+        <change>IMPROVEMENT: Made hide bubbles on scroll down more smooth.</change>
+        <change>IMPROVEMENT: Added an option to disable hide bubbles in scroll down (Settings->More->Hide Bubbles on scroll).</change>
+        <change>BUG FIX: Fixed crashes.</change>
+    </release>
+    <release version="1.9.9">
+        <change>IMPROVEMENT: Made hide bubbles on scroll down more smooth.</change>
+        <change>IMPROVEMENT: Added an option to disable hide bubbles in scroll down (Settings->More->Hide Bubbles on scroll).</change>
+    </release>
+    <release version="1.9.8">
+        <change>IMPROVEMENT: Bubble size reverted to original size, we’ll add an option to control it later.</change>
+        <change>BUG FIX: Fixed bug with new bubbles in collapsed mode.</change>
+    </release>
+    <release version="1.9.7">
+        <change>IMPROVEMENT: Bubble size reverted to original size, we’ll add an option to control it later.</change>
+    </release>
+    <release version="1.9.6">
+        <change>IMPROVEMENT: Hide bubbles on scroll down and show on scroll up.</change>
+        <change>IMPROVEMENT: Made bubbles smaller.</change>
+        <change>BUG FIX: Fixed back button behaviour.</change>
+        <change>BUG FIX: Made URL bar's autosuggestion less aggresive.</change>
+        <change>BUG FIX: Fixed crashes.</change>
+        <change>NEW: Added rsbrowser/rbrowser, lightning to fallback browser list.</change>
+    </release>
+    <release version="1.9.5">
+        <change>IMPROVEMENT: Hide bubbles on scroll down and show on scroll up.</change>
+    </release>
+    <release version="1.9.4">
+        <change>IMPROVEMENT: Made bubbles smaller.</change>
+        <change>BUG FIX: Made url bar's autosuggestion less aggresive.</change>
+        <change>BUG FIX: Fixed crashes.</change>
+    </release>
+    <release version="1.9.3">
+        <change>NEW: Added rsbrowser/rbrowser, lightning to fallback browser list.</change>
+        <change>BUG FIX: Fixed back button behaviour.</change>
+        <change>BUG FIX: Fixed crashes in native libraries.</change>
+    </release>
+    <release version="1.9.2">
+        <change>NEW: Setting to control 3rd party cookie blocking (default is on).</change>
+        <change>BUG FIX: Fix loading articles on forbes.com.</change>
+        <change>BUG FIX: Fix loading indicator and theme colors not getting reset when the URL changes within a bubble.</change>
+        <change>BUG FIX: URL input view now respects theme preferences.</change>
+        <change>BUG FIX: Fix crashes in native libraries.</change>
+    </release>
+    <release version="1.9.1">
+        <change>NEW: Setting to control 3rd party cookie blocking (default is on).</change>
+        <change>BUG FIX: Fix loading articles on forbes.com.</change>
+        <change>BUG FIX: Fix loading indicator and theme colors not getting reset when the URL changes within a bubble.</change>
+        <change>BUG FIX: URL input view now respects theme preferences.</change>
+    </release>
+    <release version="1.9.0">
+        <change>IMPROVEMENT: Rebranded to Peek.</change>
+        <change>IMPROVEMENT: Turned on Tracking Protection feature by default (can be turned off in Settings->More).</change>
+        <change>IMPROVEMENT: Turned on Ad Block feature by default (can be turned off in Settings->More).</change>
+        <change>IMPROVEMENT: Added disable protection option to easily whitelist at the site level (menu item ’Enable Peek shields’).</change>
+        <change>BUG FIX: Fixed blank bubble after resume from unlock.</change>
+        <change>BUG FIX: Fixed top crashes.</change>
+    </release>
+    <release version="1.8.2">
+        <change>IMPROVEMENT: Added disable protection option to easily whitelist at the site level (menu item ’Peek site protection’).</change>
+    </release>
+    <release version="1.8.1">
+        <change>IMPROVEMENT: Added HTTPS Everywhere feature (which can be turned on in Settings->More).</change>
+        <change>IMPROVEMENT: Added Tracking Protection feature (which can be turned on in Settings->More).</change>
+        <change>IMPROVEMENT: Added Ad Block feature (which can be turned on in Settings->More).</change>
+        <change>BUG FIX: Fixed top crashes and small bugs.</change>
+    </release>
+    <release version="1.8.0">
+        <change>BUG FIX: Fix to avoid crashes with HTTPS Everywhere on some devices.</change>
+    </release>
+    <release version="1.7.9">
+        <change>IMPROVEMENT: Added HTTPS Everywhere feature (which can be turned off in Settings->More).</change>
+        <change>BUG FIX: Fixed top crashes.</change>
+    </release>
+    <release version="1.7.8">
+        <change>BUG FIX: Fixed crash with older versions of Android.</change>
+    </release>
+    <release version="1.7.7">
+        <change>BUG FIX: Corrected welcome page.</change>
+    </release>
+    <release version="1.7.6">
+        <change>IMPROVEMENT: Added first time run page.</change>
+        <change>IMPROVEMENT: Added button to open a new bubble from the main app.</change>
+    </release>
+    <release version="1.7.4">
+        <change>IMPROVEMENT: Optimized battery usage for expanded, inactive, and at rest bubbles.</change>
+        <change>BUG FIX: Incognito mode wasn’t working.</change>
+        <change>BUG FIX: Fixed top crashes.</change>
+    </release>
+    <release version="1.7.3">
+        <change>BUG FIX: Fixed top crashes.</change>
+    </release>
+    <release version="1.7.2">
+        <change>IMPROVEMENT: Speed up the auto suggestion control. Limit suggestion to show only 50 recent history urls.</change>
+        <change>IMPROVEMENT: Decreased memory usage.</change>
+        <change>BUG FIX: The toolbar does not appear properly when there is an embedded youtube context.</change>
+        <change>BUG FIX: Fixed top crashes.</change>
+    </release>
+    <release version="1.7.1">
+        <change>BUG FIX: Fixed top crashes.</change>
+        <change>BUG FIX: When you click back button it does not close the current bubble.</change>
+    </release>
+
+    <release version="1.7.0">
+        <change>NEW: Bubble URL bar and suggestions when typing.</change>
+        <change>NEW: New bubble menu item added.</change>
+        <change>IMPROVEMENT: Flick tracking improvements.</change>
+        <change>IMPROVEMENT: Tweaked some animations for better performance around collapsing and expanding bubbles.</change>
+        <change>BUG FIX: Select element crash regression on some devices.</change>
+        <change>BUG FIX: Empty default browser prompt sometimes appearing bug.</change>
+    </release>
+
+    <release version="1.6.7">
+        <change>IMPROVEMENT: Optimized bubble dragging performance.</change>
+        <change>IMPROVEMENT: Optimized battery usage for expanded and at rest bubbles.</change>
+        <change>IMPROVEMENT: Uses built in drop downs for devices with stable WebViews.</change>
+        <change>BUG FIX: Dragging bubble sometimes showed wrong favicon.</change>
+        <change>BUG FIX: Add additional browsers to the possible fallback browser option.</change>
+    </release>
+
+    <release version="1.6.6">
+        <change>BUG FIX: Fix an occasional crash when opening Peek.</change>
+        <change>REMOVED: Unused GET_ACCOUNTS permission.</change>
+    </release>
+
+    <release version="1.6.5">
+        <change>BUG FIX: Remove app picker dialog in most cases after opening a bubble. This may negatively interfere with default app selections for a while, but we're working on a fix for that. Thanks for your patience.</change>
+    </release>
+
+    <release version="1.6.4">
+        <change>BUG FIX: Android M compatibility fixes for the fallback browser and left/right bubble pickers. We now display popular browsers which are installed on the device in the application picker.</change>
+    </release>
+
+    <release version="1.6.3">
+        <change>BUG FIX: Redirected links from applications should close in a single back button press again. We're going back to the previous back button behavior for the time being.</change>
+    </release>
+
+    <release version="1.6.2">
+        <change>BUG FIX: Fix for missing translations which occasionally caused crashes for non-English builds.</change>
+    </release>
+
+    <release version="1.6.1">
+        <change>NEW: Long pressing on image links now gives you the option of opening the image or the link address in a new bubble.</change>
+        <change>BUG FIX: Back button handling has been refactored to fix a few cases where pressing the back button would close the bubble.</change>
+    </release>
+
+    <release version="1.6.0">
+        <change>NEW: Peek is now fully free! Enjoy unlimited bubbles and all pro features for free.</change>
+        <change>NEW: Themes now also apply to reading mode.</change>
+        <change>IMPROVEMENT: Offline bubble reloading will now only reload the most recent bubble. This is to reduce memory usage while also improving loading speed and stability.</change>
+    </release>
+
+    <release version="1.5.2">
+        <change>NEW: Added an option to download images from the context menu after a long press. This requires us to ask for the permissions to write to external storage.</change>
+        <change>NEW: Ability to upload files via HTML file picker inputs. This requires us to ask for the permissions to read from external storage.</change>
+        <change>BUG FIX: Fixed text color for light colored theme backgrounds.</change>
+        <change>BUG FIX: Fixed previously broken functionality with various websites and image galleries.</change>
+        <change>BUG FIX: Fixed top crashers.</change>
+    </release>
+
+    <release version="1.5.1">
+        <change>NEW: In bubble request desktop site option.</change>
+        <change>NEW: Bubbles loaded while not connected to the internet will now be automatically loaded once an internet connection is detected.</change>
+        <change>FIX: Reading mode sometimes not working.</change>
+        <change>FIX: Closing a tab via the hardware Back button no longer triggers a device vibration twice.</change>
+        <change>FIX: Fixed an occasional crash when focusing on drop down elements.</change>
+        <change>FIX: Fixed a crash when undoing a closed tab via the snackbar.</change>
+    </release>
+
+    <release version="1.5.0">
+        <change>NEW: Add ability to color the toolbar with a website's theme color/favicon color (Settings -> Color toolbar).</change>
+        <change>NEW: Add "Domain redirects" customization, allowing you to define domains which, when loaded, will
+            always be referred to your fallback browser (such as Chrome).</change>
+        <change>IMPROVEMENT: Update appearance for material design.</change>
+        <change>IMPROVEMENT: Use Lollipop themed Snackbar prompt. This can be dismissed also by swiping.</change>
+        <change>REMOVED: "Google Account redirect" removed in favor of new "Domain redirects" functionality.</change>
+        <change>REMOVED: "Ok Google" support. This is functionality is now available directly via the Google App (Settings -> Voice -> "Ok Google" detection -> From any screen).</change>
+        <change>NEW: Translation support for Afrikaans - South Africa, Hebrew, Indonesian, Korean, Norwegian, Slovak, Turkish, Chinese - Hong Kong SAR.</change>
+        <change>NEW: Support for select elements.</change>
+    </release>
+
+    <release version="1.4.8" versioncode="14700">
+        <change>BUG FIX: Fix app when using Android System WebView v40 (on Android 5.0 or later).</change>
+        <change>BUG FIX: Stability/security fixes.</change>
+    </release>
+
+    <release version="1.4.7" versioncode="14700">
+        <change>BUG FIX: Fix tab icons displaying when Peek is minimized (thanks @GeneralChops90).</change>
+        <change>BUG FIX: Fix webpage scrolling becoming unresponsive after dismissing a JavaScript alert (thanks +Arpith Sharma).</change>
+    </release>
+
+    <release version="1.4.6" versioncode="14600">
+        <change>BUG FIX: Page title is no longer cleared for certain URLs.</change>
+        <change>BUG FIX: Memory leak fixes. Excess battery usage issues should be largely resolved.</change>
+    </release>
+
+    <release version="1.4.5" versioncode="14500">
+        <!--<change>IMPROVEMENT: Darken beneath the status bar when dragging a bubble (Android 4.4 and above).</change>-->
+        <change>IMPROVEMENT: Use color on Settings dividers.</change>
+        <change>IMPROVEMENT: Optimize app boot-up time.</change>
+        <change>BUG FIX: Stability/memory leak fixes.</change>
+    </release>
+
+    <release version="1.4.4" versioncode="14400">
+        <change>IMPROVEMENT: Use Android L's Up button throughout Settings.</change>
+        <change>CHANGE: Taper back the animation as Peek is opened via a launcher.</change>
+        <change>CHANGE: Default zoom level is now 100%.</change>
+        <change>CHANGE: Reading Mode uses default zoom level.</change>
+        <change>CHANGE: Don't list the Google Photos app in the "Intercept links from" dialog. This app is actually the same app as Google+, and listing them both only causes confusion.</change>
+        <change>BUG FIX: Fix issue where the launcher would flash on screen for a brief moment when exiting the Settings.</change>
+        <change>BUG FIX: Stability fixes.</change>
+    </release>
+
+    <release version="1.4.3" versioncode="14300">
+        <change>IMPROVEMENT: Updated Chinese (Simplified), Chinese (Taiwan), Dutch, French, Russian translations. Thanks to all the volunteer translators!</change>
+        <change>BUG FIX: Dialogs display correctly when using Dark theme.</change>
+        <change>BUG FIX: Fix overly large Peek icon on dialogs on lower-resolution devices.</change>
+    </release>
+
+    <release version="1.4.2" versioncode="14200">
+        <change>BUG FIX: TapPath no longer appears in the "Select default app" dialog.</change>
+        <change>BUG FIX: Ensure icons on Settings screen display at a consistent size.</change>
+    </release>
+
+    <release version="1.4.1" versioncode="14100">
+        <change>IMPROVEMENT: Updated Czech, German, Italian, Polish and Thai translations. Thanks to all the volunteer translators!</change>
+        <change>CHANGE: Don't include TapPath in the list of browsers/default apps.</change>
+        <change>BUG FIX: Stability fixes.</change>
+    </release>
+
+    <release version="1.4.0" versioncode="14000">
+        <change>NEW: Material Design! Shadows, color and depth, oh my!</change>
+        <change>NEW: Select between light and dark themes.</change>
+        <change>NEW: Battery Save Mode (Beta).</change>
+        <change>IMPROVEMENT: Display icons on Settings (where appropriate).</change>
+        <change>CHANGE: Made the Peek notification controls consistent. Touching the notification will always toggle hiding/unhiding the app. Close All is always available by expanding the notification.</change>
+        <change>BUG FIX: Notifications display dark icons on Android L and white icons on earlier Android versions.</change>
+        <change>BUG FIX: Shadow image displays underneath bubble targets.</change>
+        <change>BUG FIX: Stability fixes.</change>
+    </release>
+
+    <release version="1.3.2" versioncode="13200">
+        <change>CHANGE: Increase animation speed.</change>
+        <change>BUG FIX: Fix bug where expanded bubbles would display when Peek was minimized.</change>
+    </release>
+
+    <release version="1.3.1" versioncode="13100">
+        <change>BUG FIX: Ensure app finishes correctly when closing tabs via a Wear device.</change>
+        <change>BUG FIX: Fix broken strings causing crashes when using Arabic or Hindi.</change>
+    </release>
+
+    <release version="1.3.0" versioncode="13000">
+        <change>NEW: Text content from a link can be displayed on Android Wear devices (requires Pro). Links can also be opened/closed on your device via Wear.</change>
+        <change>NEW: Peek can now be 'hidden' via the notification. When hidden, the app will still be running, just no longer visible
+            (thus enabling background YouTube playback or similar).</change>
+        <change>IMPROVEMENT: Much smoother animation when web content slides on/off screen.</change>
+        <change>IMPROVEMENT: Restore slide-in animation when the first link begins to load.</change>
+        <change>IMPROVEMENT: Add hack to stop Pocket from displaying when you add links to it.</change>
+        <change>IMPROVEMENT: Peek is minimized when links are sent to external apps when running the L Preview.</change>
+        <change>IMPROVEMENT: Cookies are now enabled in Incognito Mode, but cleared at the end of the session.</change>
+        <change>IMPROVEMENT: Changing the Incognito Mode setting forces open bubbles to be reloaded.</change>
+        <change>CHANGE: Tabs from the previous session are no longer automatically restored. A prompt is now displayed requiring confirmation to restore these tabs.</change>
+        <change>CHANGE: Periodically empty cached web data.</change>
+        <change>CHANGE: The "Intercept links from" option has unfortunately been disabled for those running the L Preview due to the Android API required for this functionality being depreciated by Google.</change>
+        <change>BUG FIX: "Intercept links from" works correctly for Android 4.4 and below.</change>
+        <change>BUG FIX: Fix rare issue where no tabs would display and pressing the device's Home button failed to close Peek.</change>
+        <change>BUG FIX: Fix issue where web content sometimes failed to slide on screen.</change>
+        <change>BUG FIX: Fix issue where bubble favicon is not updated after the Pro trial has finished.</change>
+        <change>BUG FIX: Fix issue where "Unable to launch 3rd party application" toast erroneously displayed.</change>
+    </release>
+
+    <release version="1.2.1" versioncode="12100">
+        <change>BUG FIX: Fix issue where Back button must be pressed after minimizing Peek by dragging a bubble to the screen edge or on the Close tab target.</change>
+        <change>BUG FIX: Stability fixes.</change>
+    </release>
+
+    <release version="1.2.0" versioncode="12000">
+        <change>NEW: "OK, Google" support (Requires Pro, Android 4.4 or later, must be enabled via Settings).</change>
+        <change>NEW: Free version allows for a link to be loaded from any app (previously was restricted to a single app).</change>
+        <change>NEW: Granular controls to configure which apps Peek will and won't intercept links from.</change>
+        <change>NEW: When closing a tab, an Undo prompt is displayed, allowing people to quickly restore that tab (configurable via Settings).</change>
+        <change>NEW: Reading Mode (Beta), which extracts the main text from a link (Requires Pro).</change>
+        <change>IMPROVEMENT: If a link was just loaded, prevent loading that link again for a short time period. Fixes multiple links loading in the event a link is clicked twice.</change>
+        <change>IMPROVEMENT: Blacken out status and navigation bars when rendering on top of an app that uses translucent mode.</change>
+        <change>IMPROVEMENT: Enable the Up button on the Settings and History.</change>
+        <change>BUG FIX: Stability fixes.</change>
+    </release>
+
+    <release version="1.1.3" versioncode="11300">
+        <change>BUG FIX: Google+ redirects work again (thanks +Ian Lake!).</change>
+    </release>
+
+    <release version="1.1.2" versioncode="11200">
+        <change>NEW: Initial translations for Chinese (Taiwan), Danish, French, Hindi, Hungarian, Japanese, Polish, Portuguese, Portuguese (Brazil), Spanish, Spanish (Latin America), Swedish and Turkish.</change>
+        <change>NEW: URLs can be shared directly to Peek via a 3rd party app's Share button.</change>
+        <change>IMPROVEMENT: Smoother animation when dragging a bubble.</change>
+        <change>CHANGE: Clicking the Share button when reading a tab no longer automatically closes the current tab.</change>
+        <change>BUG FIX: Links that should open in a new tab when clicked no longer require a long press.</change>
+        <change>BUG FIX: Stability fix when attempting to load a 3rd party app fails.</change>
+    </release>
+
+    <release version="1.1.1" versioncode="11100">
+        <change>NEW: Arabic translation.</change>
+        <change>IMPROVEMENT: Updated Czech, Chinese (Simplified), Dutch, German, Italian, Russian and Thai translations.</change>
+        <change>BUG FIX: Stability fixes.</change>
+    </release>
+
+    <release version="1.1.0" versioncode="11000">
+        <change>NEW: Add a 24 hour trial of Peek Pro's features for all non-Pro users.</change>
+        <change>NEW: Translation support for Czech, Chinese (Simplified), Dutch, German, Italian, Russian and Thai. More languages to follow.</change>
+        <change>NEW: Add option to change the User Agent.</change>
+        <change>NEW: Add "Close bubble" option to overflow menu.</change>
+        <change>NEW: Add "Stop" option to overflow menu when a webpage is loading.</change>
+        <change>IMPROVEMENT: If the "Vibrate on touch" system setting is disabled, the app will not trigger any vibrations.</change>
+        <change>IMPROVEMENT: Add a Close button on the upgrade/inform popup.</change>
+        <change>IMPROVEMENT: The FAQ's translation question now redirects to the community Peek translation project.</change>
+        <change>BUG FIX: Many stability fixes.</change>
+    </release>
+
+    <release version="1.0.4" versioncode="10402">
+        <change>BUG FIX: Many stability fixes.</change>
+    </release>
+
+    <release version="1.0.3" versioncode="10300">
+        <change>NEW: Add option to set Peek as the default system browser (assuming it is not already).</change>
+        <change>IMPROVEMENT: Include the title of a webpage when sharing URLs.</change>
+        <change>IMPROVEMENT: Increase time period required before "Close all" functionality kicks in when hovering over the Close bubble.
+            Should address people unintentionally closing all their open tabs.</change>
+        <change>IMPROVEMENT: "Close all" long press text uses Sans Serif font.</change>
+        <change>IMPROVEMENT: Expand FAQ with entries about common questions such as how to close a tab quickly and why links may not be loading with Peek.</change>
+        <change>IMPROVEMENT: Add shortcut to Peek Beta to the FAQ.</change>
+        <change>CHANGE: Move FAQ to front page of the Settings to improve its visibility.</change>
+        <change>CHANGE: Add shortcut to view my other apps to the Settings.</change>
+        <change>BUG FIX: Fix case where YouTube embeds were sometimes not found on a page.</change>
+        <change>BUG FIX: Many stability fixes.</change>
+    </release>
+
+    <release version="1.0.2" versioncode="10200">
+        <change>NEW: Clicking the version number in the settings displays the full change log.</change>
+        <change>CHANGE: Add a new 'Auto expand' checkbox to the settings. Replaces the previous (and confusing) 'Auto content display' setting.</change>
+        <change>CHANGE: By default, links no longer automatically expand when they have finished loading.</change>
+        <change>CHANGE: Free version no longer displays the notice about Peek only handling links from a single app each time a link is
+                loaded from the non-designated app. This prompt now only displays very rarely.</change>
+        <change>BUG FIX: Many stability fixes.</change>
+    </release>
+
+    <release version="1.0.1" versioncode="10101">
+        <change>Fix GPS usage for pages that request location (Note: Peek itself never accesses your location).</change>
+    </release>
+
+    <release version="1.0.0" versioncode="10100">
+        <change>Initial release.</change>
+    </release>      
+    
+</changelog>

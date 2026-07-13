@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Peek</string>
+    <string name="service_name">Peek Renderer</string>
+    <string name="notification_title">Peek</string>
+
+</resources>

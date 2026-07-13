@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Peek[D]</string>
+    <string name="service_name">Peek Renderer[D]</string>
+    <string name="notification_title">Peek[D]</string>
+    <string name="send_intent_label">Open with Peek[D]</string>
+
+</resources>

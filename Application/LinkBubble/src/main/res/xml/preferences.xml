@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:title="@string/preference_category_configuration2"
+        android:key="preference_category_configuration"
+        android:layout="@layout/preference_category_material">
+
+        <!--
+        <SwitchPreference
+            android:key="preference_enabled"
+            android:title="@string/preference_enabled_title"
+            android:defaultValue="true" />-->
+
+        <Preference
+            android:key="preference_set_default_browser"
+            android:title="@string/preference_set_default_browser_title"
+            android:summary="@string/preference_set_default_browser_summary"/>
+
+        <!--
+        -->
+        <Preference
+            android:key="preference_default_apps"
+            android:title="@string/preference_default_apps_title"
+            android:summary="@string/preference_default_apps_summary"/>
+
+        <Preference
+            android:key="preference_domains"
+            android:title="@string/preference_domains_title"
+            android:summary="@string/preference_domains_summary"
+            />
+
+        <Preference
+            android:key="preference_left_consume_bubble"
+            android:title="@string/preference_left_consume_bubble_title"
+            />
+        <Preference
+            android:key="preference_right_consume_bubble"
+            android:title="@string/preference_right_consume_bubble_title"
+            />
+
+        <Preference
+            android:title="@string/preference_theme_title"
+            android:key="preference_theme"
+            />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="preference_theme_toolbar"
+            android:title="@string/preference_theme_toolbar_title"
+            android:summary="@string/preference_theme_toolbar_summary"
+            android:dependency="preference_theme"
+            android:defaultValue="true"
+            />
+
+        <Preference
+            android:key="preference_more"
+            android:title="@string/preference_more_title"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/preference_category_browser"
+        android:layout="@layout/preference_category_material">
+
+        <!--
+        <PreferenceScreen
+            android:title="@string/preference_article_mode_title"> -->
+
+        <!--
+            <CheckBoxPreference
+                android:key="preference_auto_article_mode"
+                android:title="@string/preference_auto_article_mode_title"
+                android:summary="@string/preference_auto_article_mode_summary"
+                android:defaultValue="false"
+                /> -->
+
+        <!--
+        </PreferenceScreen> -->
+
+        <Preference
+            android:key="preference_webview_battery_save_v2"
+            android:title="@string/preference_webview_battery_save_title"
+            />
+
+        <Preference
+            android:title="@string/preference_webview_text_zoom_title"
+            android:key="preference_webview_text_zoom2">
+        </Preference>
+
+        <androidx.preference.ListPreference
+            android:key="preference_user_agent"
+            android:title="@string/preference_user_agent_title"
+            android:entries="@array/preference_user_agent_options"
+            android:entryValues="@array/preference_user_agent_values"
+            android:dialogTitle="@string/preference_user_agent_title"
+            android:defaultValue="default"
+            />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:key="preference_incognito"
+            android:title="@string/preference_incognito_title"
+            android:summary="@string/preference_incognito_summary"
+            android:defaultValue="false"
+            />
+
+        <Preference
+            android:key="preference_clear_browser_cache"
+            android:title="@string/preference_clear_browser_cache_title"/>
+
+        <!--
+        <PreferenceScreen
+            android:key="preference_more"
+            android:title="@string/preference_more"
+            android:dependency="preference_enabled"
+            >
+
+            <CheckBoxPreference
+                android:key="preference_scan_for_youtube_embeds"
+                android:title="@string/preference_scan_for_youtube_embeds_title"
+                android:summary="@string/preference_scan_for_youtube_embeds_summary"
+                android:defaultValue="true"
+                />
+
+            <PreferenceScreen
+                android:key="preference_category_debug"
+                android:title="@string/preference_category_debug">
+
+                <CheckBoxPreference
+                    android:key="auto_load_url"
+                    android:title="Auto load URL"
+                    android:summary="Load abc.net.au on app boot"
+                    android:defaultValue="false"/>
+
+                <CheckBoxPreference
+                    android:key="debug_flick"
+                    android:summary="Flick targets show message when hit only."
+                    android:title="Flick Targets"
+                    android:defaultValue="false" />
+
+                <Preference
+                    android:key="debug_crash"
+                    android:summary="CRASH THE APP (TEST RECOVERY)."
+                    android:title="Crash!"/>
+
+            </PreferenceScreen>
+
+        </PreferenceScreen>
+        -->
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/preference_category_general"
+        android:key="preference_category_general"
+        android:layout="@layout/preference_category_material">
+
+        <!--
+        <Preference
+            android:key="preference_say_thanks"
+            android:title="@string/preference_say_thanks_title"
+            android:summary="@string/preference_say_thanks_summary" />
+            -->
+
+        <Preference
+            android:key="preference_faq"
+            android:title="@string/faq_title"
+            android:summary="@string/preference_faq_summary">
+        </Preference>
+
+        <Preference
+            android:key="preference_help"
+            android:title="@string/preference_help_title"/>
+
+        <Preference
+            android:key="preference_my_other_apps"
+            android:title="@string/preference_my_other_apps_title"
+            android:summary="@string/preference_my_other_apps_summary" />
+
+        <Preference
+            android:key="preference_version"
+            android:title="@string/preference_version_title"
+            android:summary="@string/preference_version_summary"
+             />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

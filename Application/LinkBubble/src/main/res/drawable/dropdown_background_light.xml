@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- M3-style popup/menu surface (rounded corners, flat fill - elevation shadow comes
+     from the hardware-accelerated PopupWindow itself) replacing a square-cornered,
+     hard-bordered Holo-era 9-patch. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/color_light_theme" />
+    <corners android:radius="8dp" />
+</shape>
