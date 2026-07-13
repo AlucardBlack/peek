@@ -4,12 +4,16 @@
 
 package com.peek.browser.articlerender
 
-import android.os.AsyncTask
 import android.util.Log
 import com.peek.browser.Config
 import com.peek.browser.Settings
 import de.jetwick.snacktory.HtmlFetcher
 import de.jetwick.snacktory.JResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.MalformedURLException
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -28,38 +32,42 @@ class ArticleContent {
         fun onFinished(articleContent: ArticleContent?)
     }
 
-    class BuildContentTask(private val mOnFinishedListener: OnFinishedListener) : AsyncTask<String, JResult, JResult>() {
+    // Cancellation relies on plain coroutine Job cancellation (unlike UiAsyncTask): there's no
+    // onCancelled() override here to preserve, so letting the launch abort silently on cancel()
+    // matches the original AsyncTask contract of simply not calling onPostExecute/onFinished.
+    class BuildContentTask(private val mOnFinishedListener: OnFinishedListener) {
 
-        override fun doInBackground(vararg data: String): JResult? {
+        private var mJob: Job? = null
 
-            var result: JResult? = null
-            val url = data[0]
-            val pageHtml = data[1]
-            try {
-                Log.d(TAG, "BuildContentTask().doInBackground(): url:$url")
-                val fetcher = HtmlFetcher()
-                result = fetcher.extract(url, pageHtml)
-            } catch (ex: Exception) {
-                Log.d(TAG, ex.localizedMessage, ex)
+        internal fun execute(url: String, pageHtml: String) {
+            mJob = CoroutineScope(Dispatchers.Main).launch {
+                val result = withContext(Dispatchers.IO) {
+                    try {
+                        Log.d(TAG, "BuildContentTask().doInBackground(): url:$url")
+                        HtmlFetcher().extract(url, pageHtml)
+                    } catch (ex: Exception) {
+                        Log.d(TAG, ex.localizedMessage, ex)
+                        null
+                    }
+                }
+
+                if (result == null) {
+                    mOnFinishedListener.onFinished(null)
+                    return@launch
+                }
+
+                val articleContent = extract(result)
+
+                if (articleContent.mUrl == null || articleContent.mText!!.isEmpty()) {
+                    mOnFinishedListener.onFinished(null)
+                } else {
+                    mOnFinishedListener.onFinished(articleContent)
+                }
             }
-
-            return if (isCancelled) null else result
         }
 
-        override fun onPostExecute(result: JResult?) {
-            if (result == null) {
-                mOnFinishedListener.onFinished(null)
-                return
-            }
-
-            val articleContent = extract(result)
-
-            if (articleContent.mUrl == null || articleContent.mText!!.isEmpty()) {
-                mOnFinishedListener.onFinished(null)
-                return
-            }
-
-            mOnFinishedListener.onFinished(articleContent)
+        fun cancel(mayInterruptIfRunning: Boolean) {
+            mJob?.cancel()
         }
     }
 

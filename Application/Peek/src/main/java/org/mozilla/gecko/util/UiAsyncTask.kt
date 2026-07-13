@@ -6,37 +6,44 @@
 package org.mozilla.gecko.util
 
 import android.os.Handler
-import android.os.Looper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.android.asCoroutineDispatcher
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Executes a background task and publishes the result on the UI thread.
  *
  * The standard [android.os.AsyncTask] only runs onPostExecute on the
  * thread it is constructed on, so this is a convenience class for creating
- * tasks off the UI thread.
+ * tasks off the UI thread. Backed by coroutines: [mBackgroundThreadHandler] is wrapped as a
+ * CoroutineDispatcher so doInBackground still runs on the same shared background thread callers
+ * already pass in (e.g. GeckoBackgroundThread), while onPostExecute/onCancelled run on Main.
+ *
+ * Cancellation is deliberately a plain flag rather than coroutine Job cancellation: doInBackground
+ * always runs to completion (matching the original Handler-based behavior), and the flag is only
+ * consulted afterwards to decide between onPostExecute and onCancelled - callers like
+ * LoadFaviconTask rely on onCancelled() actually running to clean up its in-flight-loads map.
  */
-abstract class UiAsyncTask<Params, Progress, Result>(private val mBackgroundThreadHandler: Handler) {
+abstract class UiAsyncTask<Params, Progress, Result>(mBackgroundThreadHandler: Handler) {
+
+    private val mBackgroundDispatcher = mBackgroundThreadHandler.asCoroutineDispatcher()
+
     @Volatile
     private var mCancelled = false
 
-    private inner class BackgroundTaskRunnable(private val mParams: Array<out Params>) : Runnable {
-
-        override fun run() {
-            val result = doInBackground(*mParams)
-
-            getUiHandler().post {
-                if (mCancelled)
-                    onCancelled()
-                else
-                    onPostExecute(result)
-            }
-        }
-    }
-
     fun execute(vararg params: Params) {
-        getUiHandler().post {
+        CoroutineScope(Dispatchers.Main.immediate).launch {
             onPreExecute()
-            mBackgroundThreadHandler.post(BackgroundTaskRunnable(params))
+            val result = withContext(mBackgroundDispatcher) {
+                doInBackground(*params)
+            }
+            if (mCancelled) {
+                onCancelled()
+            } else {
+                onPostExecute(result)
+            }
         }
     }
 
@@ -54,19 +61,4 @@ abstract class UiAsyncTask<Params, Progress, Result>(private val mBackgroundThre
     protected open fun onPostExecute(result: Result) {}
     protected open fun onCancelled() {}
     protected abstract fun doInBackground(vararg params: Params): Result
-
-    companion object {
-        @Volatile
-        private var sHandler: Handler? = null
-
-        @Synchronized
-        private fun getUiHandler(): Handler {
-            var handler = sHandler
-            if (handler == null) {
-                handler = Handler(Looper.getMainLooper())
-                sHandler = handler
-            }
-            return handler
-        }
-    }
 }

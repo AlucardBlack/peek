@@ -31,21 +31,45 @@ then build. Each item lists the concrete anchors found in the tree.
 
 ## Phase 1 — API modernization
 
-- **Retire `AsyncTask`** (deprecated). Live usages in `MainApplication`
+- ~~**Retire `AsyncTask`** (deprecated). Live usages in `MainApplication`
   (`InitWhiteListCollectorAsyncTask`, `DownloadAdBlockDataAsyncTask`) and the
   custom `org.mozilla.gecko.util.UiAsyncTask` used by favicon/bitmap loading.
   Move to coroutines (`kotlin-stdlib` already present; add
-  `kotlinx-coroutines-android`).
-- **`onBackPressed()` / `startActivityForResult`** — ~58 hits across the UI
-  layer against deprecated APIs. Migrate to `OnBackPressedDispatcher` and the
-  Activity Result API. Start with `ContentView` (four `onBackPressed`
-  overrides).
-- **Legacy theming.** `AndroidManifest` still applies
-  `@android:style/Theme.Holo.Light` to `MainApplication` and some activities,
-  despite the Material3 restyle. Finish moving everything to `AppTheme` and
-  verify dynamic-color/dark-mode coverage.
-- **`android.enableJetifier=true`** in `gradle.properties` — audit whether any
-  dependency still needs it; dropping Jetifier speeds builds.
+  `kotlinx-coroutines-android`).~~ **Done** — added
+  `kotlinx-coroutines-android:1.11.0`. Converted the 4 real
+  `android.os.AsyncTask` classes found (`MainApplication`'s two, plus
+  `DownloadImage.DownloadImageTask` and `ArticleContent.BuildContentTask`,
+  the latter needing `Job`-backed `cancel()` support for
+  `WebViewRenderer`'s cleanup path) to direct `CoroutineScope(...).launch {
+  withContext(Dispatchers.IO) { ... } }` calls. `UiAsyncTask` itself (used by
+  `LoadFaviconTask`'s chaining logic and `BitmapUtils.getDrawable()`) was
+  reimplemented on coroutines internally — `Handler.asCoroutineDispatcher()`
+  preserves the exact background thread callers already pass in, and
+  cancellation stayed a plain `@Volatile` flag (not `Job.cancel()`) so
+  `onCancelled()` keeps firing to clean up `LoadFaviconTask`'s in-flight-loads
+  map, matching the original Handler-based semantics exactly. Zero call-site
+  changes needed for `LoadFaviconTask`/`BitmapUtils`/`Favicons`.
+- **`onBackPressed()` / `startActivityForResult`** — actual count is **16**
+  hits across 6 files (the "~58" estimate above was stale), not as large as
+  first thought. `ContentView.kt` has the roadmap's "four": three are
+  forwarding boilerplate (web/article-mode controller callbacks + a
+  back-key listener) that funnel into one real handler at `ContentView.kt:1532`.
+  `ExpandedActivity`'s `startActivityForResult` (WebView file-chooser flow)
+  is the one that actually needs the Activity Result API contract, not a
+  mechanical rename; `EntryActivity`'s looks vestigial (result never
+  consumed). Migrate to `OnBackPressedDispatcher` and Activity Result API.
+- **Legacy theming.** `AppTheme` is already Material3-modernized. Gap is the
+  `<application>` default theme and 6 activities (`EntryActivity` + 5
+  `Notification*Activity`s via `TransparentTheme`, plus `ExpandedActivity` via
+  `ExpandedModeTheme`) still on `Theme.Holo.Light`-derived styles. Also found
+  4 apparently-dead Holo styles in `styles.xml` (`ActiveTheme`,
+  `ContentThemeBase`/`ContentTheme`, `SectionHeaderTheme`) with zero
+  references — cleanup candidates alongside the migration.
+- **`android.enableJetifier=true`** in `gradle.properties` — no
+  `com.android.support` dependency anywhere in the declared dependency list,
+  so it looks safe to disable on paper, but transitive dependencies could
+  still need it; confirming requires an actual build with the flag off, not
+  just static analysis.
 
 ## Phase 2 — Dependencies & security ✅ Done
 

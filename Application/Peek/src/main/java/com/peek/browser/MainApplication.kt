@@ -18,11 +18,14 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Vibrator
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.android.material.color.DynamicColors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import com.peek.browser.Constant.BubbleAction
 import com.peek.browser.adblock.ABPFilterParser
 import com.peek.browser.adblock.WhiteListCollector
@@ -49,6 +52,8 @@ class MainApplication : Application() {
 
     @JvmField
     var mIconCache: IconCache? = null
+
+    private val mApplicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     override fun onCreate() {
         super.onCreate()
@@ -77,19 +82,11 @@ class MainApplication : Application() {
         if (Settings.get().isAdBlockEnabled) {
             EventBus.post(SettingsMoreActivity.AdBlockTurnOnEvent())
         }
-        InitWhiteListCollectorAsyncTask().execute()
+        mApplicationScope.launch { initWhiteListCollector() }
 
         CrashTracking.log("MainApplication.onCreate()")
         //WebView.setWebContentsDebuggingEnabled(true);
         //checkStrings();
-    }
-
-    inner class InitWhiteListCollectorAsyncTask : AsyncTask<Void, Void, Long>() {
-        override fun doInBackground(vararg params: Void): Long? {
-            initWhiteListCollector()
-
-            return null
-        }
     }
 
     fun initWhiteListCollector() {
@@ -147,16 +144,8 @@ class MainApplication : Application() {
         event.mainController.updateIncognitoMode(event.mIncognito)
     }
 
-    inner class DownloadAdBlockDataAsyncTask : AsyncTask<Void, Void, Long>() {
-        override fun doInBackground(vararg params: Void): Long? {
-            createABPParser()
-
-            return null
-        }
-    }
-
     fun onAdBlockOn(event: SettingsMoreActivity.AdBlockTurnOnEvent) {
-        DownloadAdBlockDataAsyncTask().execute()
+        mApplicationScope.launch { createABPParser() }
     }
 
     /*
