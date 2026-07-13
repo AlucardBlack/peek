@@ -1,62 +1,56 @@
-# Brave for Android (formerly Link Bubble)
+# Peek
 
-##Install instructions and setup
+Peek is an Android browser that opens links in a small floating "bubble"
+instead of a full-screen tab, so you can keep reading without losing your
+place in whatever app you were in.
 
-`git clone git@github.com:brave/browser-android.git`
+Peek is a modernized fork of [Link Bubble](https://github.com/AlucardBlack/link-bubble)
+(originally by Chris Lacy, later maintained by Brave Software as
+`brave/browser-android`). The codebase has since been fully migrated to
+Kotlin/AndroidX, restyled with Material3 and dynamic color, and renamed
+throughout — see [LICENSE.txt](LICENSE.txt) for the license (MPL 2.0)
+carried over from the original project.
 
-Either install the [Crashlytics/Fabric Android Studio plugin](http://try.crashlytics.com/sdk-android/) or copy `Application/LinkBubble/fabric.properties.template` to `Application/LinkBubble/fabric.properties` and fill in the apiSecret.
+## Install instructions and setup
 
-Copy `Application/LinkBubble/src/main/java/com/linkbubble/ConfigAPIs.java.template` to `Application/LinkBubble/src/main/java/com/linkbubble/ConfigAPIs.java` and fill in the youtube apiSecret.
+`git clone git@github.com:AlucardBlack/peek.git`
 
-Copy `Application/LinkBubble/src/main/AndroidManifest.xml.template` to `Application/LinkBubble/src/main/AndroidManifest.xml` and fill in `com.crashlytics.ApiKey` and
-`io.fabric.ApiKey` with your Crashlytics API key. You can obtain it from logging into your Fabric account and going to: `Settings -> Organizations -> Brave (or your organization)` then click on `API Key` at the top.
+Copy `Application/LinkBubble/src/main/AndroidManifest.xml.template` to
+`Application/LinkBubble/src/main/AndroidManifest.xml`.
 
-npm install
+`npm install`
 
-##Building
+## Building
 
-Open `./Application/` in Android Studio and build.  You'll need the NDK installed if you don't already have it, instructions below.
+Open `./Application/` in Android Studio and build. You'll need the NDK
+installed if you don't already have it, instructions below.
 
-##Building release build
+## Building release build
 
 Copy `build-release.sh.template` to `build-release.sh`.
 
-Modify each of these exported environment variables: `LINK_BUBBLE_KEYSTORE_LOCATION`, `LINK_BUBBLE_KEYSTORE_PASSWORD`, and `LINK_BUBBLE_KEY_PASSWORD`.
+Modify each of these exported environment variables: `PEEK_KEYSTORE_LOCATION`,
+`PEEK_KEYSTORE_PASSWORD`, `PEEK_KEY_ALIAS`, `PEEK_KEY_PASSWORD`.
 
-If you get an error about similar to:
+If you get an error similar to:
 
 > Failure [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
 
 Try uninstalling the application which already exists on your plugged in device.
 
-##Installing the NDK
+## Installing the NDK
 
 Android Studio has an easy way to download and link to the NDK.
 
 In the menu navigate to File, Project Structure. Click the 'Download Android NDK' link. This should download and unzip the NDK, as well as link it inside of local.properties.
 
-If you are not using Android Studio, reference this commit: https://github.com/brave/browser-android/commit/0fa9f58286e0679ec5772e19b995d6a508907691
-
-##Telling getlocalization.com about new strings
-
-1. Periodically upload the file `./Application/LinkBubble/src/main/res/values/strings.xml` to [getlocalization.com](https://www.getlocalization.com/LinkBubble/files/).  getlocalization.com will determine which strings are new
-2. When prompted on getlocalization.com, press the mark for retranslation (or keep existing) for changed strings.
-
-##Getting new translated strings from getlocalization.com
-
-1. Install npm dependencies with `npm install`.
-2. Run `npm run translate <username> <password>` to pull down the translated xml files.
-3. Commit and push your change.
-
-Remember to uncomment `checkStrings` from `MainApplication` and call it in `onCreate` to make sure the pulled files don't cause crashes with format specifiers.
-
-##ADB
+## ADB
 
 If you don't have `adb` in your path add it to your `~/.bash_profile` or similar file:
 
 `export PATH=/Users/<your-username>/Library/Android/sdk/platform-tools:$PATH`
 
-- **Installing an apk onto your device:**  
-  `adb install -r ./LinkBubble/build/outputs/apk/LinkBubble-playstore-release.apk`
+- **Installing an apk onto your device:**
+  `adb install -r ./LinkBubble/build/outputs/apk/playstore/debug/LinkBubble-playstore-debug.apk`
 - **Getting a list of devices:**
   `adb devices`

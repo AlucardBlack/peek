@@ -1,10 +1,10 @@
 rm -Rf dist
-export LINK_BUBBLE_KEYSTORE_LOCATION=path/to/linkbubble_play_keystore
-export LINK_BUBBLE_KEYSTORE_PASSWORD='keystore-password-here'
-export LINK_BUBBLE_KEY_ALIAS='linkbubble'
-export LINK_BUBBLE_KEY_PASSWORD='key-password'
+export PEEK_KEYSTORE_LOCATION=path/to/peek_play_keystore
+export PEEK_KEYSTORE_PASSWORD='keystore-password-here'
+export PEEK_KEY_ALIAS='peek'
+export PEEK_KEY_PASSWORD='key-password'
 cd ./Application
 ./gradlew assemblePlaystoreRelease
 cd ../
 mkdir -p dist
-cp Application/LinkBubble/build/outputs/apk/LinkBubble-playstore-release.apk dist/
+cp Application/LinkBubble/build/outputs/apk/playstore/release/LinkBubble-playstore-release.apk dist/

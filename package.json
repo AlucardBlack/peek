@@ -1,14 +1,13 @@
 {
-  "name": "link-bubble",
+  "name": "peek",
   "version": "0.0.0",
-  "description": "Link Bubble Browser",
+  "description": "Peek Browser",
   "scripts": {
     "translate": "babel-node scripts/updateTranslations.js",
     "postinstall": "sh ./scripts/copyJNIFiles.js",
     "lint": "semistandard Application/LinkBubble/src/main/assets/pagescripts/*"
   },
-  "repository": "brave/browser-android",
-  "author": "Brave Software <support@brave.com>",
+  "repository": "AlucardBlack/peek",
   "licenses": [
     {
       "type": "MPL",
@@ -17,7 +16,7 @@
     }
   ],
   "bugs": {
-    "url": "https://github.com/brave/browser-android/issues"
+    "url": "https://github.com/AlucardBlack/peek/issues"
   },
   "devDependencies": {
     "babel": "^5.8.21",
