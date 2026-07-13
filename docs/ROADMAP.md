@@ -145,19 +145,33 @@ then build. Each item lists the concrete anchors found in the tree.
   `MainApplication.kt`/`Util.kt`, the `SwipeDismiss*` "ensure this is a
   finger" gesture nits) are candidates if the Database/WebView/Bubble items
   below get picked up.
-- **Database layer.** `DatabaseHelper` is raw `SQLiteOpenHelper` with
-  self-flagged tech debt (2 tables, 13 methods, 6 external consumer files —
-  small-to-medium scope for a Room migration, not yet done). Found and fixed
-  two real bugs while surveying: `onUpgrade()` only dropped `linkHistory`, not
-  `favicons`, so any real version bump would've hit "table favicons already
-  exists" in `onCreate()`'s `CREATE TABLE` — now drops both. Also,
-  `getAllHistoryRecords()`/`getRecentNHistoryRecords()` opened `writableDatabase`
-  *inside* their `try` block with `db.close()` only reached on the success
-  path — an `IllegalStateException` mid-query leaked the connection instead of
-  closing it. Moved `db.close()` to `finally` and added the same
-  `CrashTracking.log(...)` other methods in this file already do on catch
-  (previously just a bare TODO comment, no logging). Room migration itself is
-  still open.
+- ~~**Database layer.**~~ **Done** — `DatabaseHelper` migrated to Room
+  (`androidx.room:room-runtime:2.8.4` + KSP `room-compiler`). Kept the exact
+  same public API (`DatabaseHelper(context)`, same method signatures) so the
+  6 external consumer files (`MainApplication`, `HistoryActivity`,
+  `SettingsActivity`, `BubbleView`, `LoadFaviconTask`,
+  `SearchURLSuggestionsContainer`) needed zero changes — it's now a thin
+  facade over `HistoryDao`/`FaviconDao` (new `PeekDatabase`,
+  `HistoryRecordEntity`, `FaviconEntity`; `HistoryRecord` itself untouched,
+  since other files construct it directly). Real version-2 `Migration(1, 2)`
+  replaces the old destructive `onUpgrade()` drop-and-recreate — rebuilds
+  both tables to Room's expected schema (matching entity nullability: `time`/
+  `imageSize` `NOT NULL`, `title`/`url`/`host`/`pageUrl`/`data` nullable)
+  while preserving existing rows, rather than assuming the old hand-rolled
+  schema already happens to match. Verified the migration's raw SQL directly
+  against a scratch SQLite file seeded with the legacy schema: data survived
+  intact and `PRAGMA table_info` confirmed the resulting `NOT NULL` flags
+  match the entities exactly. Kept `.allowMainThreadQueries()` — several call
+  sites (`HistoryActivity`, `SettingsActivity`,
+  `SearchURLSuggestionsContainer`, `MainApplication.saveUrlInHistory`) call
+  this synchronously, some from the main thread, same as the old
+  `SQLiteOpenHelper` always allowed; converting to suspend/Flow DAOs and
+  threading coroutines through all 6 call sites was judged out of scope for
+  this pass (bigger, harder to verify without a device this session) — worth
+  revisiting separately if those call sites ever need to move off the main
+  thread anyway. No Robolectric/instrumented test added (none exists in this
+  project yet) — verification leaned on Room's compile-time query validation
+  (KSP passed clean) plus the manual SQLite migration check above.
 - ~~**WebView hardening.**~~ **`WebSettings` defaults audited, JS-bridge
   hardened.** 17 files touch `WebView`/`WebSettings` (close to the "~18"
   estimate). Settings themselves are already reasonably safe: mixed content
