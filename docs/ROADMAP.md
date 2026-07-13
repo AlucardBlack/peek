@@ -225,14 +225,38 @@ then build. Each item lists the concrete anchors found in the tree.
 
 ## Phase 4 — Release & distribution
 
-- **Signing/release flow.** `build-release.sh` is templated with
-  `PEEK_KEYSTORE_*` env vars — document a repeatable release checklist
-  (CONTRIBUTING only covers bumping `versionPatch`).
-- **ABI coverage.** `abiFilters` ships `arm64-v8a` + `x86_64` only. Decide
-  whether `armeabi-v7a` (older 32-bit devices, minSdk is 26) is worth including.
-- **Play compliance.** targetSdk 35 is current. Track the next required-target
-  bump and the SDK 35+ edge-to-edge / predictive-back requirements (ties into
-  the `onBackPressed` migration in Phase 1).
+- ~~**Signing/release flow.**~~ **Done** — added a "Release checklist" section
+  to `CONTRIBUTING.md` (CI-green check, version bump, one-time
+  `build-release.sh` setup from the template, build, sanity-check the output
+  version, install-and-smoke-test on a device *before* uploading since release
+  is the only build type that runs R8, upload, tag).
+- **ABI coverage.** `abiFilters` ships `arm64-v8a` + `x86_64` only. Whether
+  `armeabi-v7a` (older 32-bit devices, minSdk is 26) is worth including is a
+  market-reach-vs-APK-size call for whoever owns that decision — not
+  something to guess at from the code. Still open.
+- ~~**Play compliance.**~~ **Predictive-back flag fixed; targetSdk 36 bump
+  still open, time-sensitive.** Added `android:enableOnBackInvokedCallback="true"`
+  to `<application>` — the Phase 1 `onBackPressed()` migration registered
+  `OnBackPressedCallback`s on `EntryActivity`/`ExpandedActivity`, but without
+  this manifest flag the system never actually activates the predictive-back
+  gesture/preview animation, so that migration's real payoff was inert until
+  now. Safe app-wide: activities that haven't migrated (plain `Activity` and
+  AppCompatActivity screens with no back override) fall back to normal back
+  handling unaffected, per Android's own compat behavior, just without the
+  preview animation for those screens.
+  **Checked Google Play's current target API policy (as of 2026-07-13):**
+  by **August 31, 2026** every new app/update must target Android 16 (API
+  36), and *existing* published apps must target at least API 35 to remain
+  visible on Android 16/17 devices (extension available to Nov 1, 2026).
+  Peek's targetSdk 35 clears the existing-app bar today, but any update
+  submitted after Aug 31 needs targetSdk 36 — roughly 7 weeks out from today.
+  compileSdk 36 platforms are already installed locally (`android-36`,
+  `android-36.1`); current AGP is 8.5.2, and both a newer 8.x (8.13.2) and
+  9.x (9.2.1) line support it. Not attempted yet — Android 16's behavior
+  changes "activate the moment your app opts in" (edge-to-edge enforcement,
+  predictive-back, notification/full-screen-intent changes), so this needs
+  deliberate planning and on-device verification, not a same-session bump.
+  [Target API level requirements for Google Play apps](https://developer.android.com/google/play/requirements/target-sdk)
 
 ---
 
