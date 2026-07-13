@@ -49,9 +49,12 @@ then build. Each item lists the concrete anchors found in the tree.
 
 ## Phase 2 — Dependencies & security
 
-- **jsoup 1.7.3 (2013).** Article-mode / snacktory HTML parsing runs on a
+- ~~**jsoup 1.7.3 (2013).** Article-mode / snacktory HTML parsing runs on a
   decade-old jsoup with known CVEs. Bump to current 1.18.x and fix the
-  `de.jetwick.snacktory` call sites.
+  `de.jetwick.snacktory` call sites.~~ **Done** — bumped to jsoup 1.18.3; the
+  only breaking call site was `StringUtil.join` in `ExpandedActivity` (removed
+  `org.jsoup.helper.StringUtil`, replaced with `joinToString`). Added a
+  runtime extraction test (`ArticleTextExtractorTest`).
 - **Unmaintained UI libs.** `se.emilsjolander:stickylistheaders` and
   `com.timehop.stickyheadersrecyclerview` are abandoned. Plan replacement with
   RecyclerView sticky-header patterns (RecyclerView already a dependency).
