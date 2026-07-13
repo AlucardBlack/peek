@@ -128,7 +128,7 @@ then build. Each item lists the concrete anchors found in the tree.
   and `.../easyprivacy.txt` both return `200` with working ETags (matches
   `ADBlockUtils`' caching logic); no code change needed.
 
-## Phase 3 — Product & UX
+## Phase 3 — Product & UX ✅ Mostly done (haptics polish deferred)
 
 - **TODO backlog.** Actual count is **20** markers, not 23 (stale estimate).
   ~~`BubbleFlowDraggable`'s `// TODO: Implement me` (line 82)~~ **Done** —
@@ -198,9 +198,30 @@ then build. Each item lists the concrete anchors found in the tree.
   `addJavascriptInterface` exposes these methods to *any* script in the
   page's top-level window, not just the app's own injected scripts - the
   underlying reason both issues above were reachable.
-- **Bubble/overlay UX.** The custom physics engine (`physics/DraggableHelper`,
-  self-noted "This probably fires… should be fixed") and gesture handling
-  (`SwipeDismiss*`, `OnSwipeTouchListener`) are ripe for polish and haptics.
+- ~~**Bubble/overlay UX.**~~ **Suspect assertion + gesture nits fixed; haptics
+  not started.** Traced `DraggableHelper.clearTargetPos()`'s self-noted
+  "This probably fires… should be fixed" assertion to its root cause:
+  `setTargetPos()` sets `mAnimationListener` unconditionally, then for
+  near-instant durations (`tIn < 0.0001f`) calls `clearTargetPos()` — whose
+  assertion expects no pending listener. Worse, that branch never actually
+  invoked the listener's `onAnimationComplete()` at all, a real dropped-
+  callback bug independent of the assertion noise. Fixed by nulling
+  `mAnimationListener` before `clearTargetPos()` and firing the callback
+  explicitly after the snap, mirroring the normal animation-completion path
+  in `update()`. (Checked every current `setTargetPos()` call site first —
+  none currently combine a near-zero duration with a non-null listener, so
+  this wasn't actively firing today, but the fix closes the landmine for any
+  future call site.) Also fixed the two "ensure this is a finger" TODOs in
+  `SwipeDismissTouchListener`/`SwipeDismissListViewTouchListener` (ignore
+  stylus/mouse/eraser `MotionEvent.getToolType()`, not just plain touch) and
+  the "use an ease-out interpolator" TODO (both files' linear alpha-fade
+  during swipe now runs through a `DecelerateInterpolator`, applied to both
+  files for consistency even though only one had the comment). Haptics is
+  still open — some already exist (`MainApplication.handleBubbleAction()`
+  vibrates on most bubble actions), but adding more (e.g. on
+  swipe-dismiss/snap) is a product decision about which interactions should
+  get feedback, not a bug fix, and needs a physical device to feel right —
+  left for a separate pass.
 
 ## Phase 4 — Release & distribution
 
@@ -224,7 +245,13 @@ then build. Each item lists the concrete anchors found in the tree.
    the biggest deprecation cluster.~~ Done, except `startActivityForResult`
    (deferred — not actually compiler-flagged deprecated on either affected
    class, so no concrete reason to touch the Activity Result API yet).
-4. **Interleave Phase 3 product work against the TODO backlog — next up.**
+4. ~~Interleave Phase 3 product work against the TODO backlog.~~ Done, except
+   haptics polish (deferred — a product decision needing a physical device,
+   not a bug fix) and the Room async/coroutines rewrite (deferred —
+   preserved existing synchronous/main-thread call sites instead).
+5. **Phase 4 (release & distribution) — next up**, or revisit the deferred
+   items above once there's a concrete reason to (device testing available,
+   product direction on haptics, etc.).
 
 *Not yet prioritized against user demand — treat ordering as engineering-risk
 based, adjust once product goals are set.*

@@ -8,6 +8,7 @@ import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -39,6 +40,7 @@ class SwipeDismissTouchListener(
     private var mSwipingSlop = 0
     private var mVelocityTracker: VelocityTracker? = null
     private var mTranslationX = 0f
+    private val mAlphaInterpolator = DecelerateInterpolator()
 
     /**
      * The callback interface used by [SwipeDismissTouchListener] to inform its client
@@ -83,7 +85,16 @@ class SwipeDismissTouchListener(
 
         when (motionEvent.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
-                // TODO: ensure this is a finger, and set a flag
+                // Only finger touches trigger swipe-to-dismiss; ignore stylus/mouse/eraser input
+                // (more likely a hover/click/pointer drag than an intentional dismiss gesture).
+                // Leaving mVelocityTracker null here means every other branch's `?: return false`
+                // already skips processing for the rest of this gesture, same as canDismiss() below.
+                val toolType = motionEvent.getToolType(motionEvent.actionIndex)
+                if (toolType == MotionEvent.TOOL_TYPE_STYLUS || toolType == MotionEvent.TOOL_TYPE_MOUSE
+                        || toolType == MotionEvent.TOOL_TYPE_ERASER) {
+                    return false
+                }
+
                 mDownX = motionEvent.rawX
                 mDownY = motionEvent.rawY
                 if (mCallbacks.canDismiss(mToken)) {
@@ -184,9 +195,8 @@ class SwipeDismissTouchListener(
                 if (mSwiping) {
                     mTranslationX = deltaX
                     mView.translationX = deltaX - mSwipingSlop
-                    // TODO: use an ease-out interpolator or such
-                    mView.alpha = max(0f, min(1f,
-                            1f - 2f * abs(deltaX) / mViewWidth))
+                    val rawFraction = max(0f, min(1f, 2f * abs(deltaX) / mViewWidth))
+                    mView.alpha = 1f - mAlphaInterpolator.getInterpolation(rawFraction)
                     return true
                 }
             }

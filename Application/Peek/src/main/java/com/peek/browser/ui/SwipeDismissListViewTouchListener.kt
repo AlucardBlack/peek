@@ -26,6 +26,7 @@ import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import android.widget.AbsListView
 import android.widget.ListView
 import java.util.ArrayList
@@ -77,6 +78,7 @@ class SwipeDismissListViewTouchListener(
     private var mDownPosition: Int = 0
     private var mDownView: View? = null
     private var mPaused: Boolean = false
+    private val mAlphaInterpolator = DecelerateInterpolator()
 
     /**
      * The callback interface used by [SwipeDismissListViewTouchListener] to inform its client
@@ -148,7 +150,15 @@ class SwipeDismissListViewTouchListener(
                     return false
                 }
 
-                // TODO: ensure this is a finger, and set a flag
+                // Only finger touches trigger swipe-to-dismiss; ignore stylus/mouse/eraser input
+                // (more likely a hover/click/pointer drag than an intentional dismiss gesture).
+                // Leaving mDownView/mVelocityTracker unset here means every other branch's
+                // null-check already skips processing for the rest of this gesture.
+                val toolType = motionEvent.getToolType(motionEvent.actionIndex)
+                if (toolType == MotionEvent.TOOL_TYPE_STYLUS || toolType == MotionEvent.TOOL_TYPE_MOUSE
+                        || toolType == MotionEvent.TOOL_TYPE_ERASER) {
+                    return false
+                }
 
                 // Find the child view that was touched (perform a hit test)
                 val rect = Rect()
@@ -280,8 +290,8 @@ class SwipeDismissListViewTouchListener(
 
                 if (mSwiping) {
                     mDownView!!.translationX = deltaX - mSwipingSlop
-                    mDownView!!.alpha = Math.max(0f, Math.min(1f,
-                            1f - 2f * Math.abs(deltaX) / mViewWidth))
+                    val rawFraction = Math.max(0f, Math.min(1f, 2f * Math.abs(deltaX) / mViewWidth))
+                    mDownView!!.alpha = 1f - mAlphaInterpolator.getInterpolation(rawFraction)
                     return true
                 }
             }

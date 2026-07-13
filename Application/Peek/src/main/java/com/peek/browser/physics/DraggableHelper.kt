@@ -279,7 +279,6 @@ class DraggableHelper(
     }
 
     fun clearTargetPos() {
-        // TODO: This probably fires. It can be disabled temporarily if a pain, but should be fixed.
         Util.Assert(mAnimationListener == null, "non-null mAnimationListener")
 
         endWindowExpansion(mLogicalX, mLogicalY)
@@ -451,8 +450,16 @@ class DraggableHelper(
             }
 
             if (tIn < 0.0001f) {
+                // Near-instant "animation": clear mAnimationListener before clearTargetPos() (its
+                // assertion expects no pending listener - it was only just set above for this same
+                // call), then fire the completion callback ourselves once the position is final,
+                // same as the normal animation-completion path in update() does. This used to leave
+                // mAnimationListener set (tripping that assertion) and silently drop the caller's
+                // listener without ever invoking onAnimationComplete().
+                mAnimationListener = null
                 clearTargetPos()
                 setExactPos(xIn, yIn)
+                listener?.onAnimationComplete()
             } else {
                 mAnimType = typeIn
 
