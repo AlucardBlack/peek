@@ -47,6 +47,7 @@ class PageInspector(
     private var mTouchIconEntryCount = 0
     private var mLastTouchIconResultString: String? = null
     private var sTouchIconTransformation: TouchIconTransformation? = null
+    private var mSelectDialog: AlertDialog? = null
 
     interface OnItemFoundListener {
         fun onTouchIconLoaded(bitmap: Bitmap, pageUrl: String?)
@@ -129,7 +130,16 @@ class PageInspector(
         }
     }
 
-    // For security reasons, all callbacks should be in a self contained class
+    // For security reasons, all callbacks should be in a self contained class.
+    //
+    // Caveat: addJavascriptInterface() exposes every @JavascriptInterface method here to *any*
+    // script running in the page's top-level window, not just the pagescripts/*.js this class
+    // injects itself - a malicious site's own JS can call window.Peek.* directly. Keep these
+    // methods one-way (report-only, no getters that hand back app data) and don't trust their
+    // arguments for anything security-sensitive: e.g. fetchHtml()'s windowUrl is JS-supplied and
+    // unauthenticated, so it's only used for the local tryForArticleContent() eligibility check -
+    // the domain actually displayed in reader mode comes from WebViewRenderer's own tracked
+    // getUrl(), not this parameter.
     private inner class JSEmbedHandler {
 
         @JavascriptInterface
@@ -241,6 +251,11 @@ class PageInspector(
                 Log.d(TAG, "error parsing json")
             }
 
+            // Page content (any script in the page, not just our own SelectElements.js) can call
+            // this repeatedly - dismiss any dialog already showing rather than stacking them, so a
+            // malicious page can't spam native AlertDialogs.
+            mSelectDialog?.dismiss()
+
             val builder = AlertDialog.Builder(mContext)
             builder.setSingleChoiceItems(optionList.toTypedArray(), selectedIndex, DialogInterface.OnClickListener { dialog, position ->
                 Log.d(TAG, "click position is - $position")
@@ -252,6 +267,12 @@ class PageInspector(
             })
             val dialog = builder.create()
             dialog.window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
+            dialog.setOnDismissListener {
+                if (mSelectDialog === dialog) {
+                    mSelectDialog = null
+                }
+            }
+            mSelectDialog = dialog
             dialog.show()
         }
 
@@ -274,6 +295,12 @@ class PageInspector(
         @JavascriptInterface
         fun fetchHtml(html: String, windowUrl: String) {
             //Log.d(TAG, "fetchHtml() - " + html);
+
+            // Page content controls this string's size (see class doc above), so bound it before
+            // handing it to jsoup/snacktory extraction - real pages' outerHTML rarely approach this.
+            if (html.length > MAX_FETCH_HTML_LENGTH) {
+                return
+            }
 
             var fetchPageHtml = false
             try {
@@ -327,5 +354,7 @@ class PageInspector(
         private const val UNKNOWN_TAG = "unknown"        // the tag Chrome/WebView uses for unknown elements
 
         private const val MAX_FAVICON_ENTRIES = 4
+
+        private const val MAX_FETCH_HTML_LENGTH = 5_000_000
     }
 }

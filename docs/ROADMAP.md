@@ -158,9 +158,32 @@ then build. Each item lists the concrete anchors found in the tree.
   `CrashTracking.log(...)` other methods in this file already do on catch
   (previously just a bare TODO comment, no logging). Room migration itself is
   still open.
-- **WebView hardening.** ~18 files touch `WebView`/`WebSettings`. Audit for safe
-  defaults (JS enablement scope, mixed content, file access, safe-browsing) and
-  modern `WebViewAssetLoader` where applicable.
+- ~~**WebView hardening.**~~ **`WebSettings` defaults audited, JS-bridge
+  hardened.** 17 files touch `WebView`/`WebSettings` (close to the "~18"
+  estimate). Settings themselves are already reasonably safe: mixed content
+  is on the API-21+ default (`MIXED_CONTENT_NEVER_ALLOW`, never overridden),
+  `allowFileAccessFromFileURLs`/`allowUniversalAccessFromFileURLs` are never
+  touched (both default `false`), the reader-mode WebView
+  (`ArticleRenderer`) never enables JS at all, and `WebViewAssetLoader` isn't
+  needed since nothing serves local assets via `file://` today.
+  `PageInspector`'s `JSEmbedHandler` is the one `@JavascriptInterface` bridge,
+  installed on the main browsing WebView (JS enabled for all pages) - audited
+  and fixed two real issues: (1) `onSelectElementInteract` had no guard
+  against a malicious page calling it directly and repeatedly (bypassing the
+  app's own `SelectElements.js`), spamming native `AlertDialog`s with
+  attacker-chosen text - now dismisses any dialog already showing before
+  creating a new one. (2) `fetchHtml`'s `html` argument is fully
+  JS-controlled and was unbounded, letting a page force repeated
+  jsoup/snacktory extraction on arbitrary-size payloads - capped at 5MB.
+  Traced `fetchHtml`'s other argument, `windowUrl` (also JS-supplied,
+  unauthenticated): confirmed it only feeds the local
+  `tryForArticleContent()` eligibility check - the domain actually
+  *displayed* in reader mode comes from `WebViewRenderer`'s own tracked
+  `getUrl()`, not this parameter, so origin spoofing isn't possible there.
+  Expanded the class's existing security comment to document that
+  `addJavascriptInterface` exposes these methods to *any* script in the
+  page's top-level window, not just the app's own injected scripts - the
+  underlying reason both issues above were reachable.
 - **Bubble/overlay UX.** The custom physics engine (`physics/DraggableHelper`,
   self-noted "This probably fires… should be fixed") and gesture handling
   (`SwipeDismiss*`, `OnSwipeTouchListener`) are ripe for polish and haptics.
