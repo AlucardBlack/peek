@@ -262,6 +262,123 @@ then build. Each item lists the concrete anchors found in the tree.
 
 ---
 
+# Round 2 — fresh audit, 2026-07-13
+
+Everything above is done or deliberately deferred. This section is a second
+pass over the codebase now that it's in much better shape, looking for what's
+next. Concrete anchors from a fresh dependency/deprecation/test-coverage/
+architecture sweep.
+
+## Phase 5 — Dependency freshness
+
+- **AGP 8.5.2 → 9.x.** Biggest gap in the tree; latest stable is 9.2.1 (9.3.0
+  in RC). A major-version jump, needs its own migration pass (Gradle version
+  compat, deprecated DSL) — natural to bundle with the deferred targetSdk 36
+  work in Phase 4 above, since both need compileSdk 36 tooling anyway.
+- **Kotlin 2.1.0 → 2.4.0** (3 minor versions behind), with KSP bumped in
+  lockstep (currently `2.1.0-1.0.29`, needs a version tracking whatever
+  Kotlin version lands).
+- **`androidx.core:core` 1.13.1 → 1.19.0** (6 minor versions behind) and
+  **`com.google.android.material:material` 1.12.0 → 1.14.0** (2 minor behind).
+- **`org.jsoup:jsoup` 1.18.3 → 1.22.2** (4 minor versions behind) —
+  security-relevant given Phase 2 already bumped this once for CVEs.
+- **`androidx.recyclerview:recyclerview` 1.3.2 → 1.4.0** (1 minor behind).
+- Already current: `room-runtime`/`room-compiler` (2.8.4), `kotlinx-coroutines-android`
+  (1.11.0), `appcompat` (1.7.0, next is only 1.8.0-alpha), `preference-ktx`.
+- Effectively abandoned upstream, nothing to bump to: `androidx.palette`
+  (1.0.0, 1.1.0 has been alpha for years), `org.slf4j:slf4j-android` (1.7.36,
+  hasn't shipped since 2018).
+- **Not a simple bump, evaluate separately:** `io.coil-kt:coil` is at the
+  final 2.x release (2.7.0); Coil 3.x lives under a new coordinate
+  (`io.coil-kt.coil3:coil`, latest 3.5.0) with API changes — a deliberate
+  migration, not routine maintenance.
+
+## Phase 6 — Test coverage
+
+Only 2 test files exist (`physics/CircleTest.kt`, `de/jetwick/snacktory/ArticleTextExtractorTest.kt`)
+despite Phase 0 standing up the scaffold. Best next additions, smallest to
+largest:
+- **`physics/FlingTracker.kt`** (116 lines) — only touches `MotionEvent` for
+  `.x`/`.y`/`.eventTime`, close to pure logic. Needs Robolectric (for
+  `MotionEvent.obtain`), but a good first Robolectric test in this repo.
+- **`db/HistoryDao.kt`/`FaviconDao.kt`** — ideal for an in-memory Room
+  instance test (Room ships first-class support for this), also needs
+  Robolectric for a real SQLite/Android env.
+- **Pure-logic candidates already JVM-testable with plain JUnit, no
+  Robolectric needed:** `util/Util.kt`'s `clamp`/`distance`/
+  `clipLineSegmentToRectangle`/`closestPointToLineSegment`/`randInt`, and
+  `adblock/ADBlockUtils.kt`'s `getDataVerNumber(url)`.
+- **Needs real refactoring before testable at all:** `physics/DraggableHelper.kt`
+  (Android view/window code tangled with the animation math), `MainController`/
+  `Settings`/`ContentView` (see Phase 9) — not worth chasing without
+  extracting pure logic first.
+
+## Phase 7 — Remaining deprecations & possible functional bug
+
+- **WebView/WebSettings deprecated no-ops** (low effort, mostly harmless
+  already): `cookieManager.removeAllCookie()` (`MainController.kt:1340`,
+  `SettingsActivity.kt:701`) → `removeAllCookies(callback)`;
+  `webViewDatabase.clearFormData()`/`clearUsernamePassword()`
+  (`SettingsActivity.kt:710,721`, no-ops since API 26); `savePassword`/
+  `saveFormData` get/set (`WebViewRenderer.kt:522,574-579`, no-ops since
+  API 18/26).
+- **`Handler()` no-arg constructor** — 14 hits (deprecated, implicitly binds
+  to the calling thread's `Looper`; mechanical fix is
+  `Handler(Looper.getMainLooper())`): `SettingsDomainsActivity.kt:117`,
+  `ContentView.kt:1007,1642`, `SettingsActivity.kt:114`, `EntryActivity.kt:25`,
+  `Prompt.kt:39`, `ExpandedActivity.kt:51`, `PageInspector.kt:43`,
+  `AppPoller.kt:94`, `WebViewRenderer.kt:140,488`,
+  `org/mozilla/gecko/util/GeckoBackgroundThread.kt:19`.
+- **`NetworkConnectivity.kt` (95 lines)** is built entirely on
+  `ConnectivityManager.activeNetworkInfo`/`NetworkInfo`, deprecated API 29+ in
+  favor of `NetworkCapabilities`/`registerNetworkCallback`. Medium effort — a
+  callback-based rewrite, not a mechanical swap, since `isConnected`/
+  `isConnectedWifi`/`isConnectedFast` are currently synchronous callers.
+- **Possible existing functional bug, not just deprecated:**
+  `AppPoller.kt:39,105` call `am.getRunningTasks(1)` — deprecated since API 21
+  *and* effectively non-functional on real devices since Lollipop for
+  non-system apps (only returns the calling app's own tasks). Worth
+  confirming whether `AppPoller`'s foreground-app detection actually still
+  works before deciding how to fix it (real replacement needs
+  `UsageStatsManager`, which needs a user-granted special permission — a
+  bigger change than a deprecation fix).
+- **Misc smaller:** `MainApplication.kt:434` `vibrator.vibrate(10)`
+  (deprecated API 26+, replace with `VibrationEffect.createOneShot`);
+  `Display.getSize()`/`getMetrics()` in `Config.kt:45`,
+  `BubbleFlowDraggable.kt:320` (deprecated API 30+, `BubbleFlowActivity.kt:26`
+  doesn't count since that whole file is dead, see Phase 8).
+
+## Phase 8 — Small cleanups
+
+- **Delete `ui/BubbleFlowActivity.kt`** (69 lines) — fully dead code, its only
+  manifest registration is commented out and nothing else references it.
+  (Distinct from `BubbleFlowDraggable.kt`, which is very much alive.)
+- **`lint.xml:6-9`** suppresses `HandlerLeak` for
+  `src/main/java/com/linkbubble/util/AppPoller.java` and
+  `src/main/java/com/linkbubble/DRM.java` — both paths are stale from before
+  the `com.linkbubble`→`com.peek.browser` rename and Java→Kotlin migration;
+  neither exists anymore (`DRM.kt` doesn't exist at all). The real
+  `HandlerLeak` check isn't actually suppressed on today's `AppPoller.kt` —
+  fold into the Phase 7 `Handler()` fix and drop the stale suppression
+  entirely rather than just fixing the path.
+- **`ui/BubbleTargetView.kt:86-109`** — four `@Suppress("UNREACHABLE_CODE")`
+  guarding dead `Util.Assert(false, ...)` fallback branches after exhaustive
+  `when` blocks over `HorizontalAnchor`/`VerticalAnchor`. Kotlin's
+  exhaustiveness check already covers these; delete the dead branches and
+  suppressions together.
+
+## Phase 9 — Architecture (flagged only, not scoped)
+
+Three god-class candidates, none touched by Round 1: `ui/ContentView.kt`
+(2090 lines, 32 methods + 4 nested classes — WebView rendering, UI chrome,
+and favicon loading all in one file), `MainController.kt` (1381 lines, 56
+methods + 21 nested types — a strong god-object signal), `Settings.kt` (1349
+lines, 74 methods — every preference read/write funnels through one
+singleton). Worth a real look eventually, but each needs its own design pass,
+not something to scope from a single audit pass.
+
+---
+
 ### Suggested sequencing
 
 1. ~~Phase 0 (CI + tests + build fixes) — unblocks safe iteration.~~ Done.
