@@ -269,29 +269,57 @@ pass over the codebase now that it's in much better shape, looking for what's
 next. Concrete anchors from a fresh dependency/deprecation/test-coverage/
 architecture sweep.
 
-## Phase 5 — Dependency freshness
+## Phase 5 — Dependency freshness ✅ Done (AGP capped mid-8.x, targetSdk/Coil3 still deferred)
 
-- **AGP 8.5.2 → 9.x.** Biggest gap in the tree; latest stable is 9.2.1 (9.3.0
-  in RC). A major-version jump, needs its own migration pass (Gradle version
-  compat, deprecated DSL) — natural to bundle with the deferred targetSdk 36
-  work in Phase 4 above, since both need compileSdk 36 tooling anyway.
-- **Kotlin 2.1.0 → 2.4.0** (3 minor versions behind), with KSP bumped in
-  lockstep (currently `2.1.0-1.0.29`, needs a version tracking whatever
-  Kotlin version lands).
-- **`androidx.core:core` 1.13.1 → 1.19.0** (6 minor versions behind) and
-  **`com.google.android.material:material` 1.12.0 → 1.14.0** (2 minor behind).
-- **`org.jsoup:jsoup` 1.18.3 → 1.22.2** (4 minor versions behind) —
-  security-relevant given Phase 2 already bumped this once for CVEs.
-- **`androidx.recyclerview:recyclerview` 1.3.2 → 1.4.0** (1 minor behind).
-- Already current: `room-runtime`/`room-compiler` (2.8.4), `kotlinx-coroutines-android`
-  (1.11.0), `appcompat` (1.7.0, next is only 1.8.0-alpha), `preference-ktx`.
+- ~~**Kotlin 2.1.0 → 2.4.0**, KSP bumped in lockstep.~~ **Done** — Kotlin
+  `2.4.0`, KSP `2.3.10` (KSP dropped its old `<kotlin>-<ksp>` combined
+  versioning scheme somewhere after `2.2.21-2.0.5`; from `2.3.0` on it's a
+  plain version that tracks Kotlin directly). This surfaced a real blocker:
+  KSP `2.3.10`'s Android integration calls AGP's `addKspConfigurations()`
+  API, which doesn't exist before **AGP 8.10** (confirmed via `javap` against
+  locally-cached AGP jars — missing on 8.5.2/8.7.3, present from 9.0.1 on;
+  KSP's own commit history pins its min runtime AGP to 8.10.0). So the Kotlin
+  bump wasn't independent of AGP after all.
+- ~~**AGP 8.5.2 → 9.x.**~~ **Landed on AGP `8.13.2` instead — not the 9.x
+  jump.** There's a full `8.6`–`8.13` line this roadmap's first pass didn't
+  notice; `8.13.2` (latest 8.x) satisfies KSP's AGP≥8.10 floor without the
+  Gradle-major/deprecated-DSL migration a real 9.x jump needs. Gradle wrapper
+  bumped `8.9`→`8.13` alongside it (AGP 8.13's own min/default). **The 9.x
+  jump itself is still deferred**, bundled with targetSdk 36 as Phase 4
+  already decided — this pass just moved the *safe* part (staying on 8.x)
+  off that pile.
+- ~~**`androidx.core:core` 1.13.1 → 1.19.0**~~ **Capped at `1.18.0`, not
+  `1.19.0`.** `1.19.0`'s AAR metadata demands `minCompileSdk=37` +
+  `minAndroidGradlePluginVersion=9.1.0` — both far past what this pass's AGP
+  8.13.2 step covers, and API 37 isn't even installed locally. `1.18.0` only
+  needs `minCompileSdk=36`/AGP≥8.9.1, both satisfied. **Bumped `compileSdk`
+  35→36 to clear that floor** (platforms already installed locally per prior
+  session) — `targetSdk` stays 35, untouched; compileSdk/targetSdk are
+  independent per Android's own guidance, so this doesn't touch the deferred
+  Phase 4 targetSdk-36/Android-16-behavior item at all.
+- ~~**`com.google.android.material:material` 1.12.0 → 1.14.0**~~ **Done**
+  (`minCompileSdk=1`, no floor issues).
+- ~~**`org.jsoup:jsoup` 1.18.3 → 1.22.2**~~ **Done.**
+- ~~**`androidx.recyclerview:recyclerview` 1.3.2 → 1.4.0**~~ **Done**
+  (`minCompileSdk=35`, cleared by the compileSdk 36 bump above).
+- Verified via AAR-metadata inspection before touching build files (each
+  candidate version's `META-INF/.../aar-metadata.properties` was pulled and
+  checked for `minCompileSdk`/`minAndroidGradlePluginVersion` before
+  committing to a version), not just picked off "latest stable" — that's
+  what caught the core 1.19.0 trap above before it hit CI.
+- Already current, untouched: `room-runtime`/`room-compiler` (2.8.4),
+  `kotlinx-coroutines-android` (1.11.0), `appcompat` (1.7.0, next is only
+  1.8.0-alpha), `preference-ktx`.
 - Effectively abandoned upstream, nothing to bump to: `androidx.palette`
   (1.0.0, 1.1.0 has been alpha for years), `org.slf4j:slf4j-android` (1.7.36,
   hasn't shipped since 2018).
-- **Not a simple bump, evaluate separately:** `io.coil-kt:coil` is at the
-  final 2.x release (2.7.0); Coil 3.x lives under a new coordinate
+- **Not a simple bump, evaluate separately (still deferred):** `io.coil-kt:coil`
+  is at the final 2.x release (2.7.0); Coil 3.x lives under a new coordinate
   (`io.coil-kt.coil3:coil`, latest 3.5.0) with API changes — a deliberate
   migration, not routine maintenance.
+- Verified with a clean `assemblePlaystoreDebug` + `testPlaystoreDebugUnitTest`
+  (JBR `JAVA_HOME`) — both green, all 9 existing unit tests
+  (`CircleTest` ×6, `ArticleTextExtractorTest` ×3) still pass.
 
 ## Phase 6 — Test coverage
 
@@ -403,6 +431,11 @@ not something to scope from a single audit pass.
    synchronous call sites). **Next up: pick one of those, or start a new
    pass now that the codebase is in much better shape than this roadmap's
    2026-07-13 baseline.**
+6. ~~Phase 5 (dependency freshness).~~ Done — Kotlin 2.4.0, KSP 2.3.10, AGP
+   8.5.2→8.13.2 (not the deferred 9.x jump), Gradle wrapper 8.9→8.13,
+   compileSdk 35→36 (targetSdk untouched), core/material/jsoup/recyclerview
+   all bumped (core capped at 1.18.0, not latest 1.19.0 — see Phase 5 for
+   why). Clean build + all 9 unit tests green.
 
 *Not yet prioritized against user demand — treat ordering as engineering-risk
 based, adjust once product goals are set.*
