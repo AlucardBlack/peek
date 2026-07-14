@@ -437,5 +437,12 @@ not something to scope from a single audit pass.
    all bumped (core capped at 1.18.0, not latest 1.19.0 — see Phase 5 for
    why). Clean build + all 9 unit tests green.
 
+**Paused here (2026-07-13).** PR #3 (`roadmap-pass-2` → `main`) is open with
+CI green, awaiting human merge — not merged yet, so `main` doesn't have
+Phase 5 until that lands. The debug build was sideloaded onto a physical
+device for a quick sanity check outside CI. **Next up when resuming:** merge
+#3, then pick one of Phase 6 (test coverage), 7 (remaining deprecations), 8
+(small cleanups), or 9 (architecture — needs its own design pass first).
+
 *Not yet prioritized against user demand — treat ordering as engineering-risk
 based, adjust once product goals are set.*
